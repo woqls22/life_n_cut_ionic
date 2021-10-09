@@ -42,7 +42,14 @@ const WelcomePage: React.FC = () => {
     // setPosition(e.target.scrollTop);
     // console.log(position);
   }
-  
+  const makeAlbum=()=>{
+    if (localStorage.getItem("userInfo")) {
+      //    서비스렌더링
+      window.location.assign("/photo/main");
+    } else{
+      window.location.assign("/login");
+    }
+  }
   return (
     <IonPage ref={onScroll}>
       <IonHeader>
@@ -61,7 +68,7 @@ const WelcomePage: React.FC = () => {
             <div className="grayText">#PHOTO, #ALBUM, #PRIVATE</div>
             <div className="btn_section">
               <div>
-                <IonButton color="light" >지금 앨범만들기</IonButton>
+                <IonButton color="light" onClick={makeAlbum} >지금 앨범만들기</IonButton>
               </div>
             </div>
             <div className={"ncutImg"}>
@@ -98,8 +105,8 @@ const WelcomePage: React.FC = () => {
             소중한 '지금' <br/>같이 기억하는건 어때요?
           </div>
           <div className="btn_section">
-              <div>
-                <IonButton color="light" >지금 앨범만들기</IonButton>
+              <div style={{marginBottom:"10vh"}}>
+                <IonButton color="light" onClick={makeAlbum}>지금 앨범만들기</IonButton>
               </div>
             </div>
         </div>
