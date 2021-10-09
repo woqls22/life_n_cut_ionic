@@ -45,11 +45,16 @@ const WelcomePage: React.FC = () => {
   const makeAlbum=()=>{
     if (localStorage.getItem("userInfo")) {
       //    서비스렌더링
-      window.location.assign("/photo/main");
+      window.location.assign("/album");
     } else{
       window.location.assign("/login");
     }
   }
+  useEffect(()=>{
+    if (localStorage.getItem("userInfo")){
+        window.location.assign("/album");
+      } 
+  },[])
   return (
     <IonPage ref={onScroll}>
       <IonHeader>
@@ -68,7 +73,7 @@ const WelcomePage: React.FC = () => {
             <div className="grayText">#PHOTO, #ALBUM, #PRIVATE</div>
             <div className="btn_section">
               <div>
-                <IonButton color="light" onClick={makeAlbum} >지금 앨범만들기</IonButton>
+                <IonButton color="light" onClick={makeAlbum} expand="full">지금 앨범만들기</IonButton>
               </div>
             </div>
             <div className={"ncutImg"}>
@@ -106,7 +111,7 @@ const WelcomePage: React.FC = () => {
           </div>
           <div className="btn_section">
               <div style={{marginBottom:"10vh"}}>
-                <IonButton color="light" onClick={makeAlbum}>지금 앨범만들기</IonButton>
+                <IonButton color="light" onClick={makeAlbum} expand="full">지금 앨범만들기</IonButton>
               </div>
             </div>
         </div>

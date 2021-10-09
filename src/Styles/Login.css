@@ -1,0 +1,22 @@
+.login_title{
+    padding-top: 5vh;
+    text-align: center;
+    padding-bottom: 5vh;
+}
+.login_btn{
+    margin-top:10vh;
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.signIn_btn{
+    margin-top:3vh;
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.find_pw_btn{
+    margin-top:3vh;
+    text-align: center;
+    font-size: small;
+}

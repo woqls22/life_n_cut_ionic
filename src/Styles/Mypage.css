@@ -1,0 +1,42 @@
+.user_title{
+    margin-top: 2vh;
+    margin-bottom: 2vh;
+    display: flex;
+    align-items: center;
+}
+.user_pic{
+    margin-right: 5vw;
+}
+.card_section{
+    display: flex;
+    justify-content:space-between;
+    padding-bottom: 2vh;
+}
+.card_title{
+
+}
+.card_value{
+
+}
+.btn_logout{
+    margin-top:5vh;
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.btn_quit{
+    margin-top:2vh;
+    width:95%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.border_line{
+    border:0.1px solid lightgray;
+}
+.frined_title{
+    width:97%;
+    margin-left: auto;
+}
+.freind_list{
+    min-height: 11vh;
+}
