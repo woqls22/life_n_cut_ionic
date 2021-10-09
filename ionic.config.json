@@ -1,0 +1,7 @@
+{
+  "name": "lifeNcut",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
