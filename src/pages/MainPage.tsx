@@ -30,6 +30,11 @@ import {
         window.location.assign("/login");
       }
     }
+    useEffect(()=>{
+      if(!localStorage.getItem("userInfo")){
+        window.location.assign("/login");
+      }
+    },[])
     return (
       <IonPage ref={onScroll}>
         <IonHeader>

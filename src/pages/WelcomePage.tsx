@@ -15,6 +15,7 @@ import fourthImg from "../res/4.jpeg";
 import wishList from "../res/5.jpeg";
 import dDay from "../res/6.jpeg";
 import { useEffect, useState } from "react";
+import { useHistory } from "react-router";
 function PhotoItem(Background: any) {
   return (
     <>
@@ -42,12 +43,12 @@ const WelcomePage: React.FC = () => {
     // setPosition(e.target.scrollTop);
     // console.log(position);
   }
+  const history = useHistory();
   const makeAlbum=()=>{
     if (localStorage.getItem("userInfo")) {
-      //    서비스렌더링
-      window.location.assign("/album");
+      history.push("/album");
     } else{
-      window.location.assign("/login");
+      history.push("/login");
     }
   }
   useEffect(()=>{

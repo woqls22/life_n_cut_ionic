@@ -9,6 +9,11 @@ import {
  
   import { useEffect, useState } from "react";
   const PlacePage: React.FC = () => {
+    useEffect(()=>{
+      if(!localStorage.getItem("userInfo")){
+        window.location.assign("/login");
+      }
+    },[])
     return (
       <IonPage>
         <IonHeader>

@@ -20,3 +20,19 @@
     text-align: center;
     font-size: small;
 }
+.signup_btn{
+    margin-top: 10vh;
+    margin-bottom: 10vh;
+}
+.success_text{
+    margin-left: 6vw;
+    margin-top: 1vh;
+    font-size: smaller;
+    color:rgb(85, 211, 85);
+}
+.err_text{
+    margin-left: 6vw;
+    margin-top: 1vh;
+    font-size: smaller;
+    color:red
+}

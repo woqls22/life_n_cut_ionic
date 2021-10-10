@@ -34,15 +34,14 @@ import MainPage from "./pages/MainPage";
 import { images, airplane, person } from "ionicons/icons";
 import PlacePage from "./pages/PlacePage";
 import MyPage from "./pages/MyPage";
+import SignUpPage from "./pages/SignUpPage";
 
 const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
       <IonTabs>
         <IonRouterOutlet>
-          <Route path="/album" component={MainPage} exact={true} />
-          <Route path="/tab2" component={MainPage} exact={true} />
-          <Route path="/tab3" component={MainPage} />
+          
           <Route exact path="/welcome">
             <WelcomePage />
           </Route>
@@ -61,17 +60,20 @@ const App: React.FC = () => (
           <Route exact path="/my">
             <MyPage />
           </Route>
+          <Route exact path="/signup">
+            <SignUpPage/>
+          </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">
-          <IonTabButton tab="album" href={localStorage.getItem("userInfo")?"/album":"/login"}>
+          <IonTabButton tab="album" href={"/album"}>
             <IonIcon icon={images} />
             <IonLabel>ALBUM</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="place" href={localStorage.getItem("userInfo")?"/place":"/login"}>
+          <IonTabButton tab="place" href={"/place"}>
             <IonIcon icon={airplane} />
             <IonLabel>PLACE</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="my" href={localStorage.getItem("userInfo")?"/my":"/login"}>
+          <IonTabButton tab="my" href={"/my"}>
             <IonIcon icon={person} />
             <IonLabel>MY</IonLabel>
           </IonTabButton>

@@ -120,12 +120,12 @@ const LoginPage: React.FC = () => {
           ></IonInput>
         </IonItem>
         <div className="login_btn">
-          <IonButton expand="full" color="primary" onClick={postLoginInfo}>
+          <IonButton expand="full" color="primary" onClick={postLoginInfo} disabled={id.length==0 || password.length==0}>
             로그인
           </IonButton>
         </div>
         <div className="signIn_btn">
-          <IonButton expand="full" color="light">
+          <IonButton expand="full" color="light" onClick={()=>{history.push("/signup")}}>
             회원가입
           </IonButton>
         </div>
