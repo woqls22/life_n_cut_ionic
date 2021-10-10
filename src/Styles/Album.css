@@ -222,6 +222,12 @@
     margin-top: 2vh;
     margin-bottom: 5vh;
 }
+.albumModal{
+    width: 90vw;
+    margin-top: 20vh;
+    margin-left: auto;
+    margin-right: auto;
+}
 @keyframes fadein {
   from {
     opacity: 0;

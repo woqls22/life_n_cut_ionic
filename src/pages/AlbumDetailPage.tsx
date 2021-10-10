@@ -215,9 +215,36 @@ const AlbumDetailPage: React.FC = (props: any) => {
                 ))}
               </IonList>
             </div>
-            <IonModal isOpen={open} >
-                <p>This is modal content</p>
-                <IonButton onClick={() => handleClose()}>Close Modal</IonButton>
+            <IonModal isOpen={open}>
+              <div className="albumModal">
+                <IonLabel position="stacked">
+                  함께 하고싶은 일을 추가해주세요!
+                </IonLabel>
+                <IonItem style={{ marginBottom: "10vh", marginTop: "2vh" }}>
+                  <IonInput
+                    value={wishItem}
+                    placeholder="ex) 해외여행 가기"
+                    type="text"
+                    onIonChange={(e) => setWishItem(e.detail.value!)}
+                  ></IonInput>
+                </IonItem>
+                <IonButton
+                  onClick={() => {
+                      //버킷리스트 추가 post요청
+                  }}
+                  expand="full"
+                  style={{ marginBottom: "2vh" }}
+                >
+                  버킷리스트에 추가하기
+                </IonButton>
+                <IonButton
+                  onClick={() => handleClose()}
+                  expand="full"
+                  color="light"
+                >
+                  닫기
+                </IonButton>
+              </div>
             </IonModal>
 
             {/* <Dialog open={open} onClose={handleClose} >
