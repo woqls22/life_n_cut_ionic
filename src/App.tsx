@@ -35,6 +35,8 @@ import { images, airplane, person } from "ionicons/icons";
 import PlacePage from "./pages/PlacePage";
 import MyPage from "./pages/MyPage";
 import SignUpPage from "./pages/SignUpPage";
+import AlbumPage from "./pages/AlbumPage";
+import AlbumDetailPage from "./pages/AlbumDetailPage";
 
 const App: React.FC = () => (
   <IonApp>
@@ -54,6 +56,8 @@ const App: React.FC = () => (
           <Route exact path="/album">
             <MainPage />
           </Route>
+          <Route exact path="/album/:albumId" component={AlbumPage}/>
+          <Route exact path="/album/:albumId/info" component={AlbumDetailPage}/>
           <Route exact path="/place">
             <PlacePage />
           </Route>

@@ -1,0 +1,294 @@
+.mainComponents {
+  background-color: rgb(77, 77, 77);
+  margin: 0;
+  height: 96%;
+  display: flex;
+  overflow-y: auto;
+  width: "100%";
+}
+.imgItem {
+  min-height: 40%;
+  border: 15pt solid #1f1f1f;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  -webkit-filter: grayscale(40%);
+  margin: 20px;
+}
+.leftDiv {
+  min-width: 45%;
+  min-height: 90%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+.middleDiv {
+  margin-top: 13rem;
+  margin-bottom: 10rem;
+  height: 25rem;
+  width: 30%;
+  border-radius: 40px;
+  margin-right: 10rem;
+}
+.frame {
+  width: "100%";
+  margin-top: "20rem";
+}
+.imgItem:hover {
+  -webkit-filter: grayscale(80%);
+  -webkit-transform: scale(1.5);
+  transition: all 0.3s ease-in-out;
+}
+.centerDiv {
+  background-color: rgb(77, 77, 77);
+  width: 30%;
+  min-height: 100%;
+  color: white;
+  overflow: auto;
+}
+.rightDiv {
+  background-color: rgb(77, 77, 77);
+  width: 50%;
+  min-height: 100%;
+  color: white;
+}
+.dateBox {
+  margin-top: 40vh;
+  font-family: "Yeon Sung", cursive;
+  font-size: 2.5rem;
+  color: white;
+}
+.mobiledateBox {
+  font-family: "Yeon Sung", cursive;
+  color: white;
+  background-color: rgb(77, 77, 77);
+  text-align: center;
+  padding-top: 2%;
+}
+.albumMetaText {
+  font-family: "Yeon Sung", cursive;
+  font-size: 1rem;
+  color: white;
+  text-align: center;
+  max-width: 20rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.dateText {
+  font-family: "Yeon Sung", cursive;
+  font-size: 1rem;
+  color: white;
+  margin-top: 5%;
+  text-align: center;
+  max-width: 20rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.photoListItem {
+  min-height: 33vh;
+  width: 100%;
+  border: 12px solid #1f1f1f;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  -webkit-filter: grayscale(50%);
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  margin-bottom: -2%;
+}
+.albumtextbox {
+  border: 12px solid #1f1f1f;
+  background-color: #1f1f1f;
+  overflow: hidden;
+  margin-left: auto;
+  margin-right: auto;
+  width: 70vw;
+}
+.mobiledateText {
+  font-family: "Yeon Sung", cursive;
+  font-size: 2.5rem;
+  color: white;
+  margin-top: 2%;
+  text-align: left;
+  padding-left: 1.2rem;
+}
+.descriptionText {
+  font-family: "Yeon Sung", cursive;
+  font-size: 1rem;
+  color: white;
+  margin-top: 1%;
+  text-align: center;
+  max-width: 20rem;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+}
+.textBox {
+  font-family: "Hi Melody", cursive;
+  font-size: 2.4rem;
+  padding-top: 3vh;
+}
+.photoList {
+  padding-top: 10px;
+  font-family: "Yeon Sung", cursive;
+  font-size: 2.5rem;
+  overflow-y: auto;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 12.8vh;
+}
+
+.mobilephotoListItem {
+  min-height: 20rem;
+  max-width: 19rem;
+  width: 100%;
+  border: 10pt solid #2e2d2d;
+  border-image: linear-gradient(-45deg, #000000, #202020, #000000) 20;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  -webkit-filter: grayscale(80%);
+  margin-left: 20px;
+  margin-right: 20px;
+  overflow: hidden;
+}
+.appendBox {
+  font-family: "Hi Melody", cursive;
+  font-size: 2.4rem;
+  padding-top: 50%;
+  margin-left: 50%;
+}
+.mobileappendBox {
+  font-family: "Hi Melody", cursive;
+  font-size: 2.4rem;
+  padding-top: 50%;
+  margin-left: 50%;
+  position: absolute;
+}
+.photoListItem:hover {
+  -webkit-filter: grayscale(0%);
+  /* -webkit-transform:scale(1);  */
+  /* -webkit-transform-origin-x: -180%;
+    -webkit-transform-origin-y: 80%; */
+  transition: all 1s ease-in-out;
+}
+.photoListItem:not(:hover) {
+  transition: all 1s ease-in-out;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+.blur {
+  -webkit-filter: blur(1px);
+  -moz-filter: blur(1px);
+  -o-filter: blur(1px);
+  -ms-filter: blur(1px);
+  filter: blur(1px);
+}
+.MuiAccordionSummary-content {
+  flex-grow: 0 !important;
+}
+.MuiAccordionSummary-root {
+}
+.chatBox {
+  position: fixed;
+  height: 400px;
+  width: 100%;
+  bottom: 0px;
+  z-index: 10;
+}
+.chatContainer {
+  /* background-color:lightgrey; */
+  font-family: "Yeon Sung", cursive;
+  margin-left: auto;
+  margin-right: auto;
+  width: 350px;
+  height: 350px;
+}
+.bucketList {
+  width: 97%;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+.bucket_list_container{
+    margin-top: 2vh;
+    margin-bottom: 5vh;
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-moz-keyframes fadein {
+  /* Firefox */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fadein {
+  /* Safari and Chrome */
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@-o-keyframes fadein {
+  /* Opera */
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@keyframes fadeout {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-moz-keyframes fadeout {
+  /* Firefox */
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-webkit-keyframes fadeout {
+  /* Safari and Chrome */
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+@-o-keyframes fadeout {
+  /* Opera */
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
