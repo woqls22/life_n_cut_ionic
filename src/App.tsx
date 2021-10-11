@@ -31,13 +31,14 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 import LoginPage from "./pages/LoginPage";
 import MainPage from "./pages/MainPage";
-import { images, airplane, person } from "ionicons/icons";
+import { images, airplane, person, chatbox } from "ionicons/icons";
 import PlacePage from "./pages/PlacePage";
 import MyPage from "./pages/MyPage";
 import SignUpPage from "./pages/SignUpPage";
 import AlbumPage from "./pages/AlbumPage";
 import AlbumDetailPage from "./pages/AlbumDetailPage";
 import AlbumAnniversaryPage from "./pages/AlbumAnniversaryPage";
+import ChatPage from "./pages/ChatPage";
 
 const App: React.FC = () => (
   <IonApp>
@@ -57,9 +58,13 @@ const App: React.FC = () => (
           <Route exact path="/album">
             <MainPage />
           </Route>
+          <Route exact path="/chat">
+            <ChatPage/>
+          </Route>
           <Route exact path="/album/:albumId" component={AlbumPage}/>
           <Route exact path="/album/:albumId/info" component={AlbumDetailPage}/>
           <Route exact path="/album/:albumId/anniversary" component={AlbumAnniversaryPage}/>
+          <Route exact path="/album/:albumId/place" component={PlacePage}/>
           <Route exact path="/place">
             <PlacePage />
           </Route>
@@ -75,9 +80,9 @@ const App: React.FC = () => (
             <IonIcon icon={images} />
             <IonLabel>ALBUM</IonLabel>
           </IonTabButton>
-          <IonTabButton tab="place" href={"/place"}>
-            <IonIcon icon={airplane} />
-            <IonLabel>PLACE</IonLabel>
+          <IonTabButton tab="place" href={"/chat"}>
+            <IonIcon icon={chatbox} />
+            <IonLabel>TALK</IonLabel>
           </IonTabButton>
           <IonTabButton tab="my" href={"/my"}>
             <IonIcon icon={person} />

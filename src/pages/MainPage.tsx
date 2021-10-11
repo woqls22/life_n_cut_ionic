@@ -2,11 +2,14 @@ import {
   IonAvatar,
   IonButton,
   IonContent,
+  IonDatetime,
   IonHeader,
+  IonInput,
   IonItem,
   IonLabel,
   IonList,
   IonListHeader,
+  IonModal,
   IonPage,
   IonTitle,
   IonToolbar,
@@ -25,6 +28,14 @@ import { useHistory } from "react-router";
 const MainPage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
   const history=useHistory();
+  const [open, setOpen] = useState(false);
+  const [albumName, setAlbumName]=useState("");
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
   function onScroll(e: any) {
     console.log(e);
     // setPosition(e.target.scrollTop);
@@ -51,7 +62,7 @@ const MainPage: React.FC = () => {
       ) : (
         <>
           <IonContent className="ion-padding">
-            <IonButton expand="full">앨범 만들기</IonButton>
+            <IonButton expand="full" onClick={()=>setOpen(true)}>앨범 만들기</IonButton>
             <IonListHeader>
               <IonLabel>내가 속한 앨범</IonLabel>
             </IonListHeader>
@@ -75,6 +86,35 @@ const MainPage: React.FC = () => {
               </div>
               </IonItem>
             </IonList>
+            <IonModal isOpen={open}>
+              <div className="albumModal">
+                <IonLabel position="stacked">앨범 이름</IonLabel>
+                <IonItem style={{ marginTop: "2vh", marginBottom: "2vh" }}>
+                  <IonInput
+                    value={albumName}
+                    placeholder="ex) 가족 앨범"
+                    type="text"
+                    onIonChange={(e) => setAlbumName(e.detail.value!)}
+                  ></IonInput>
+                </IonItem>
+                <IonButton
+                  onClick={() => {
+                    //버킷리스트 추가 post요청
+                  }}
+                  expand="full"
+                  style={{ marginBottom: "2vh" }}
+                >
+                  확인
+                </IonButton>
+                <IonButton
+                  onClick={() => handleClose()}
+                  expand="full"
+                  color="light"
+                >
+                  닫기
+                </IonButton>
+              </div>
+            </IonModal>
           </IonContent>
         </>
       )}

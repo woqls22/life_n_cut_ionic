@@ -228,6 +228,11 @@
     margin-left: auto;
     margin-right: auto;
 }
+.anniversary_enroll_btn{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
 @keyframes fadein {
   from {
     opacity: 0;

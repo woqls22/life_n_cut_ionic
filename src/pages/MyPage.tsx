@@ -206,6 +206,11 @@ const MyPage: React.FC = () => {
         </div>
         <div className="btn_quit">
           <IonButton expand="full" color="light">
+            정보수정
+          </IonButton>
+        </div>
+        <div className="btn_quit">
+          <IonButton expand="full" color="light">
             회원탈퇴
           </IonButton>
         </div>

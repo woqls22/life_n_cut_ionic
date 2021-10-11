@@ -246,25 +246,6 @@ const AlbumDetailPage: React.FC = (props: any) => {
                 </IonButton>
               </div>
             </IonModal>
-
-            {/* <Dialog open={open} onClose={handleClose} >
-              <DialogTitle>버킷리스트 담기</DialogTitle>
-              <DialogContent>
-                <IonItem>
-                  <IonLabel position="stacked">함께 하고싶은 일을 추가해주세요!</IonLabel>
-                  <IonInput
-                    value={wishItem}
-                    placeholder="해외여행 가기"
-                    type="text"
-                    onIonChange={(e) => setWishItem(e.detail.value!)}
-                  ></IonInput>
-                </IonItem>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={handleClose}>확인</Button>
-                <Button onClick={handleClose}>닫기</Button>
-              </DialogActions>
-            </Dialog> */}
           </IonContent>
         </>
       )}

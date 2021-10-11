@@ -1,5 +1,4 @@
 import {
-  IonAvatar,
   IonButton,
   IonButtons,
   IonContent,
@@ -8,15 +7,16 @@ import {
   IonFabList,
   IonHeader,
   IonIcon,
+  IonInput,
   IonItem,
   IonLabel,
-  IonList,
   IonListHeader,
+  IonModal,
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
-import ExploreContainer from "../components/ExploreContainer";
 import "../Styles/Home.css";
 import "../Styles/Album.css";
 import { useEffect, useState } from "react";
@@ -25,24 +25,21 @@ import {
   arrowBack,
   image,
   calendar,
-  settings,
   informationCircle,
   menuOutline,
   trash,
+  person,
+  map
 } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
 const AlbumPage: React.FC = (props: any) => {
   const [showLoading, setShowLoading] = useState(false);
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
   const [open, setOpen] = useState(false);
+  const [inviteId, setInviteId]=useState("");
+  const [present] = useIonAlert();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -53,6 +50,9 @@ const AlbumPage: React.FC = (props: any) => {
     console.log(e);
     // setPosition(e.target.scrollTop);
     // console.log(position);
+  }
+  function alertInviteSuccess(){
+    present(inviteId+'님을 앨범에 초대했습니다', [{ text: 'Ok' }]);
   }
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
@@ -129,6 +129,11 @@ const AlbumPage: React.FC = (props: any) => {
                   <IonIcon icon={image} />
                 </IonFabButton>
                 <IonFabButton
+                  onClick={() => {history.push(`/album/${params.albumId}/place`)}}
+                >
+                  <IonIcon icon={map} />
+                </IonFabButton>
+                <IonFabButton
                  onClick={() => history.push(`/album/${params.albumId}/anniversary`)}
                 >
                   <IonIcon icon={calendar} />
@@ -138,31 +143,62 @@ const AlbumPage: React.FC = (props: any) => {
                 >
                   <IonIcon icon={informationCircle} />
                 </IonFabButton>
+                <IonFabButton
+                  onClick={() => {setOpen(true); setInviteId("")}}
+                >
+                  <IonIcon icon={person} />
+                </IonFabButton>
+               
               </IonFabList>
             </IonFab>
+            <IonModal isOpen={open}>
+              <div className="albumModal">
+                <IonLabel position="stacked">
+                  초대할 아이디
+                </IonLabel>
+                <IonItem style={{ marginBottom: "10vh", marginTop: "2vh" }}>
+                  <IonInput
+                    value={inviteId}
+                    type="text"
+                    onIonChange={(e) => setInviteId(e.detail.value!)}
+                  ></IonInput>
+                </IonItem>
+                <IonButton
+                  onClick={() => {
+                      //앨범 초대
+                      let msg = `아이디 : ${inviteId}`
+                      present({
+                        header: '앨범 접근을 허용합니다',
+                        cssClass: 'my-css',
+                        message: msg,
+                        buttons: [
+                          { text: '확인', handler: (d) => {
+                            console.log("앨범초대 api post");
+                            setOpen(false);
+                            alertInviteSuccess();
+                          }},
+                          '취소',
+                        ],
+                        onDidDismiss: (e) => {},
+                      })
+                     
+                  }}
+                  expand="full"
+                  style={{ marginBottom: "2vh" }}
+                  disabled={inviteId.length==0}
+                >
+                  앨범 초대하기
+                </IonButton>
+                <IonButton
+                  onClick={() => handleClose()}
+                  expand="full"
+                  color="light"
+                >
+                  닫기
+                </IonButton>
+              </div>
+            </IonModal>
           </IonContent>
-          <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Subscribe</DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                To subscribe to this website, please enter your email address
-                here. We will send updates occasionally.
-              </DialogContentText>
-              <TextField
-                autoFocus
-                margin="dense"
-                id="name"
-                label="Email Address"
-                type="email"
-                fullWidth
-                variant="standard"
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Cancel</Button>
-              <Button onClick={handleClose}>Subscribe</Button>
-            </DialogActions>
-          </Dialog>
         </>
       )}
     </IonPage>
