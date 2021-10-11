@@ -128,7 +128,9 @@ const AlbumPage: React.FC = (props: any) => {
                 <IonFabButton>
                   <IonIcon icon={image} />
                 </IonFabButton>
-                <IonFabButton>
+                <IonFabButton
+                 onClick={() => history.push(`/album/${params.albumId}/anniversary`)}
+                >
                   <IonIcon icon={calendar} />
                 </IonFabButton>
                 <IonFabButton

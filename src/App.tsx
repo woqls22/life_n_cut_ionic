@@ -37,6 +37,7 @@ import MyPage from "./pages/MyPage";
 import SignUpPage from "./pages/SignUpPage";
 import AlbumPage from "./pages/AlbumPage";
 import AlbumDetailPage from "./pages/AlbumDetailPage";
+import AlbumAnniversaryPage from "./pages/AlbumAnniversaryPage";
 
 const App: React.FC = () => (
   <IonApp>
@@ -58,6 +59,7 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/album/:albumId" component={AlbumPage}/>
           <Route exact path="/album/:albumId/info" component={AlbumDetailPage}/>
+          <Route exact path="/album/:albumId/anniversary" component={AlbumAnniversaryPage}/>
           <Route exact path="/place">
             <PlacePage />
           </Route>
