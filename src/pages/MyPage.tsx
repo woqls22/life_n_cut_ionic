@@ -28,6 +28,7 @@ import axios from "axios";
 import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD, getDDay } from "../Utils/Utils";
 import SkeletonLoading from "../components/SkeletonLoading";
+import { useHistory } from "react-router";
 class UserInfo {
   constructor(id: string, username: string, token: string) {}
 }
@@ -62,13 +63,14 @@ const MyPage: React.FC = () => {
     JSON.parse(localStorage.getItem("userInfo")!)
   );
   const [present] = useIonAlert();
+  const history = useHistory();
   const logOut = () => {
     LoginStore.setIsLoggedIn(false);
     LoginStore.setLoginInfo(new LoginInfoDO(""));
     localStorage.removeItem("userInfo");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("userid");
-    present("로그아웃 되었습니다!", [{ text: 'Ok' }]);
+    present("로그아웃 되었습니다!", [{ text: "Ok" }]);
     window.location.assign("/welcome");
   };
   const [showLoading, setShowLoading] = useState(true);
@@ -79,6 +81,7 @@ const MyPage: React.FC = () => {
   const [anniversary, setAnniversary] = useState("");
   const [anniversaryDate, setAnniversaryDate] = useState("");
   const [relation, setRelation] = useState("");
+  const [picUrl, setPicUrl] = useState("");
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
@@ -99,6 +102,7 @@ const MyPage: React.FC = () => {
           setRelation(res.data.relation);
           setAnniversaryDate(res.data.anniversaryDate);
           setName(res.data.name);
+          setPicUrl(res.data.pickUrl);
           setAnniversary(res.data.anniversary);
           if (res.data.birthday) {
             setBirthday(res.data.birthday);
@@ -108,9 +112,7 @@ const MyPage: React.FC = () => {
     }
   }, []);
   if (showLoading) {
-    return (
-      <>{SkeletonLoading()}</>
-    );
+    return <>{SkeletonLoading()}</>;
   }
   return (
     <IonPage>
@@ -152,7 +154,9 @@ const MyPage: React.FC = () => {
               <div className="card_title">{anniversary}</div>
               <div className="card_value">
                 {getDDay(anniversaryDate)}
-                <div style={{fontSize:"smaller"}}>{"("+getYYYYMMDD(anniversaryDate)+")"}</div>
+                <div style={{ fontSize: "smaller" }}>
+                  {"(" + getYYYYMMDD(anniversaryDate) + ")"}
+                </div>
               </div>
             </div>
             <div className="card_section">
@@ -168,7 +172,15 @@ const MyPage: React.FC = () => {
           <div className="freind_list">
             <IonChip>
               <IonAvatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                {picUrl ? (
+                  <>
+                    <img src={picUrl} />
+                  </>
+                ) : (
+                  <>
+                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                  </>
+                )}
               </IonAvatar>
               <IonLabel>여자친구</IonLabel>
             </IonChip>
@@ -205,7 +217,11 @@ const MyPage: React.FC = () => {
           </IonButton>
         </div>
         <div className="btn_quit">
-          <IonButton expand="full" color="light">
+          <IonButton
+            expand="full"
+            color="light"
+            onClick={() => history.push("/my/modify")}
+          >
             정보수정
           </IonButton>
         </div>

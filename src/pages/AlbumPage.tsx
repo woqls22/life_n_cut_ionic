@@ -1,4 +1,5 @@
 import {
+  IonBadge,
   IonButton,
   IonButtons,
   IonContent,

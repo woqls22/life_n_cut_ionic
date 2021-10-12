@@ -42,3 +42,30 @@
 .freind_list {
   min-height: 11vh;
 }
+.modify_avartar{
+  display: flex;
+  justify-content: space-evenly;
+    align-items: center;
+}
+.container_avartar{
+}
+.back{
+  border: 3px solid transparent;
+  border-radius: 50%;
+  background-image: linear-gradient(#fff, #fff), 
+  linear-gradient(to right, red 0%,  orange 100%);
+  background-origin: border-box;
+  background-clip: content-box, border-box;
+}
+.modify_title{
+  padding-top: 5vh;
+  text-align: center;
+  padding-bottom: 2vh;
+}
+.my_close_btn{
+  margin-bottom: 10vh;
+}
+.my_modify_btn{
+  margin-top: 5vh;
+  margin-bottom: 2vh;
+}

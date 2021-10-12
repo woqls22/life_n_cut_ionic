@@ -39,6 +39,7 @@ import AlbumPage from "./pages/AlbumPage";
 import AlbumDetailPage from "./pages/AlbumDetailPage";
 import AlbumAnniversaryPage from "./pages/AlbumAnniversaryPage";
 import ChatPage from "./pages/ChatPage";
+import ModifyPage from "./pages/ModifyPage";
 
 const App: React.FC = () => (
   <IonApp>
@@ -73,6 +74,9 @@ const App: React.FC = () => (
           </Route>
           <Route exact path="/signup">
             <SignUpPage/>
+          </Route>
+          <Route exact path="/my/modify">
+            <ModifyPage />
           </Route>
         </IonRouterOutlet>
         <IonTabBar slot="bottom">

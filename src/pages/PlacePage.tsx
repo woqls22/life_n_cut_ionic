@@ -1,6 +1,7 @@
 import {
   IonAvatar,
   IonButton,
+  IonButtons,
   IonCard,
   IonCardContent,
   IonCardHeader,
@@ -28,9 +29,11 @@ import {
   calendarOutline,
   checkmarkCircleOutline,
   trashBinOutline,
-  map
+  map,
+  arrowBack
 } from "ionicons/icons";
 import { WishItemDO } from "./AlbumDetailPage";
+import { useHistory } from "react-router";
 const checkboxList = [
   { val: "카페 공백", isChecked: true, id: "1" },
   { val: "에버랜드", isChecked: false, id: "2" },
@@ -43,6 +46,7 @@ const PlacePage: React.FC = () => {
   const [wishPlace, setWishPlace] = useState("");
   const [address, setAddress] = useState("");
   const [anniversaryDate, setAnniversaryDate] = useState("");
+  const history = useHistory();
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(false);
@@ -59,6 +63,11 @@ const PlacePage: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
+        <IonButtons slot="secondary">
+            <IonButton onClick={() => history.goBack()}>
+              <IonIcon slot="icon-only" icon={arrowBack} />
+            </IonButton>
+          </IonButtons>
           <IonTitle>
             <div className="toolbar">PLACE</div>
           </IonTitle>
