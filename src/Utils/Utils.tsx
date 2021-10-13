@@ -1,3 +1,6 @@
+import axios from "axios";
+import { rootURL } from "./Constants";
+
 export function getYYYYMMDD(dtr: string) {
     if (dtr.length == 0) {
       return "";
@@ -16,3 +19,14 @@ export function getYYYYMMDD(dtr: string) {
     let text = `${day}일`;
     return text;
   }
+  export const headers = {
+        Authorization: "Bearer " + localStorage.getItem("accessToken"),//the token is a variable which holds the token
+        "Content-Type": "application/json" 
+  }
+
+  export const SpringAxios = axios.create({
+    baseURL : `${rootURL}`
+  })
+  SpringAxios.interceptors.request.use(function(config){
+    return {...config, headers:headers}
+  })

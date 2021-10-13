@@ -16,85 +16,59 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import "../Styles/Home.css";
 import { arrowBack, cloudUpload } from "ionicons/icons";
 import "../Styles/Login.css";
-import LoginStore, { LoginInfoDO } from "../Store/LoginStore";
+import LoginStore, { LoginInfoDO, UserDO } from "../Store/LoginStore";
 import { rootURL } from "../Utils/Constants";
 import axios from "axios";
 import crypto from "crypto";
+import { SpringAxios } from "../Utils/Utils";
 const ModifyPage: React.FC = () => {
-  const [id, setId] = useState<string>("");
-  const [password1, setPassword1] = useState<string>("");
-  const [password2, setPassword2] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [nickname, setNickName] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [anniversary, setAnniversary] = useState("");
-  const [anniversaryDate, setAnniversaryDate] = useState("");
-  const [relation, setRelation] = useState("");
   const history = useHistory();
   const [present] = useIonAlert();
   const postLoginInfo = async () => {
-    if (id.length < 5) {
-      present("아이디는 최소 5자 이상이어야 합니다.", [{ text: "Ok" }]);
-      return;
-    }
-    if (password1.length < 5) {
-      present("비밀번호는 최소 5자 이상이어야 합니다.", [{ text: "Ok" }]);
-      return;
-    }
-    if (password1 != password2) {
-      present("비밀번호를 다시 확인해주세요!", [{ text: "Ok" }]);
-      return;
-    }
-    const data = {
-      id: id,
-      passwd: password1,
-      nickname: nickname,
-      birthday: birthday,
-    };
-    const headerconfig: any = {
-      headers: { "Content-Type": "application/json" },
-    };
-    await axios
-      .post(
-        rootURL + "/signup",
-        JSON.stringify({
-          email: id,
-          password: crypto
-            .createHash("sha512")
-            .update(password1)
-            .digest("base64")
-            .toString(),
-          auth: "ROLE_USER",
-          nickname: nickname,
-          birthday: birthday,
-          name: name,
-          anniversary: anniversary,
-          anniversaryDate: anniversaryDate,
-          relation: relation,
-        }),
-        headerconfig
-      )
-      .then((res) => {
-        LoginStore.setLoginInfo(new LoginInfoDO(id));
-        LoginStore.setLoginDialogVariable(false);
-        LoginStore.setIsLoggedIn(true);
-        present("회원가입이 완료되었습니다. 가입한 정보로 로그인해주세요.", [
-          { text: "Ok" },
-        ]);
-        history.goBack();
+    SpringAxios.put(`/user/${localStorage.getItem("userid")}`, JSON.stringify({
+      nickname: LoginStore.userInfo.nickName,
+      birthday: LoginStore.userInfo.birthday,
+      name: LoginStore.userInfo.name,
+      anniversary: LoginStore.userInfo.anniversary,
+      anniversaryDate: LoginStore.userInfo.anniversaryDate,
+      relation: LoginStore.userInfo.relation,
+      picUrl:LoginStore.userInfo.picUrl
+    })).then((res:any) => {
+        LoginStore.userInfo=new UserDO(
+          res.data.nickname,
+          res.data.relation,
+          res.data.anniversaryDate,
+          res.data.name,
+          res.data.pickUrl,
+          res.data.anniversary,
+          res.data.birthday
+        )
+        LoginStore.fetchUserInfo().then(()=>{
+          present("정보 수정이 완료되었습니다.", [
+            { text: "Ok" },
+          ]);
+          history.goBack();
+        });
       })
       .catch(() => {
-        present("아이디가 중복됩니다. 다른 아이디를 사용하세요", [
+        present("알수없는 에러 505", [
           { text: "Ok" },
         ]);
       });
   };
-
+  useEffect(() => {
+    if (!localStorage.getItem("userInfo")) {
+      window.location.assign("/login");
+    }
+    if (localStorage.getItem("userid")) {
+      LoginStore.fetchUserInfo();
+    }
+  }, []);
   return (
     <IonPage>
       <IonHeader>
@@ -119,19 +93,19 @@ const ModifyPage: React.FC = () => {
         <IonItem>
           <IonLabel position="stacked">이름</IonLabel>
           <IonInput
-            value={name}
+            value={LoginStore.userInfo.name}
             placeholder=""
             type="text"
-            onIonChange={(e) => setName(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.name=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">닉네임</IonLabel>
           <IonInput
-            value={nickname}
+            value={LoginStore.userInfo.nickName}
             placeholder=""
             type="text"
-            onIonChange={(e) => setNickName(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.nickName=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -139,18 +113,18 @@ const ModifyPage: React.FC = () => {
           <IonDatetime
             displayFormat="YYYY.MM.DD"
             min="1900-01-01"
-            value={birthday}
+            value={LoginStore.userInfo.birthday}
             placeholder="2000.01.01"
-            onIonChange={(e) => setBirthday(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.birthday=e.detail.value!}
           ></IonDatetime>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">기념일 (수식어)</IonLabel>
           <IonInput
-            value={anniversary}
+            value={LoginStore.userInfo.anniversary}
             placeholder="우리 만난지"
             type="text"
-            onIonChange={(e) => setAnniversary(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.anniversary=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -158,18 +132,18 @@ const ModifyPage: React.FC = () => {
           <IonDatetime
             displayFormat="YYYY.MM.DD"
             min="1900-01-01"
-            value={anniversaryDate}
+            value={LoginStore.userInfo.anniversaryDate}
             placeholder="2000.01.01"
-            onIonChange={(e) => setAnniversaryDate(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.anniversaryDate=e.detail.value!}
           ></IonDatetime>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">상대와의 관계</IonLabel>
           <IonInput
-            value={relation}
+            value={LoginStore.userInfo.relation}
             placeholder="OO의 남자친구"
             type="text"
-            onIonChange={(e) => setRelation(e.detail.value!)}
+            onIonChange={(e) => LoginStore.userInfo.relation=e.detail.value!}
           ></IonInput>
         </IonItem>
         <div className="my_modify_btn">

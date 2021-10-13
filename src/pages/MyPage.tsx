@@ -20,6 +20,7 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
+import {useObserver} from "mobx-react";
 import "../Styles/Home.css";
 import { useEffect, useState } from "react";
 import "../Styles/Mypage.css";
@@ -75,13 +76,6 @@ const MyPage: React.FC = () => {
   };
   const [showLoading, setShowLoading] = useState(true);
   const [id, setId] = useState("");
-  const [nickName, setNickname] = useState("");
-  const [birthday, setBirthday] = useState("");
-  const [name, setName] = useState("");
-  const [anniversary, setAnniversary] = useState("");
-  const [anniversaryDate, setAnniversaryDate] = useState("");
-  const [relation, setRelation] = useState("");
-  const [picUrl, setPicUrl] = useState("");
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
@@ -98,141 +92,140 @@ const MyPage: React.FC = () => {
         .then((res: any) => {
           console.log(res.data);
           setId(res.data.email);
-          setNickname(res.data.nickname);
-          setRelation(res.data.relation);
-          setAnniversaryDate(res.data.anniversaryDate);
-          setName(res.data.name);
-          setPicUrl(res.data.pickUrl);
-          setAnniversary(res.data.anniversary);
-          if (res.data.birthday) {
-            setBirthday(res.data.birthday);
-          }
+          LoginStore.userInfo.nickName=res.data.nickname;
+          LoginStore.userInfo.relation=res.data.relation;
+          LoginStore.userInfo.anniversaryDate=res.data.anniversaryDate;
+          LoginStore.userInfo.name = res.data.name;
+          LoginStore.userInfo.picUrl = res.data.pickUrl;
+          LoginStore.userInfo.anniversary = res.data.anniversary;
+          LoginStore.userInfo.birthday = res.data.birthday;
           setShowLoading(false);
         });
     }
   }, []);
-  if (showLoading) {
-    return <>{SkeletonLoading()}</>;
-  }
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>
-            <div className="toolbar">내 정보</div>
-          </IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent className="ion-padding">
-        <div>
-          <div></div>
-        </div>
-        <IonCard>
-          <IonCardHeader>
-            <IonCardSubtitle>{relation}</IonCardSubtitle>
-            <IonCardTitle>
-              <div className="user_title">
-                <div className="user_pic">
-                  <IonAvatar>
-                    <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" />
-                  </IonAvatar>
-                </div>
-                <div>{name}</div>
-              </div>
-            </IonCardTitle>
-          </IonCardHeader>
-          <IonCardContent>
-            <div className="card_section">
-              <div className="card_title">아이디</div>
-              <div className="card_value">{id}</div>
-            </div>
-            <div className="card_section">
-              <div className="card_title">생년월일</div>
-              <div className="card_value">{getYYYYMMDD(birthday)}</div>
-            </div>
-            <div className="card_section">
-              <div className="card_title">{anniversary}</div>
-              <div className="card_value">
-                {getDDay(anniversaryDate)}
-                <div style={{ fontSize: "smaller" }}>
-                  {"(" + getYYYYMMDD(anniversaryDate) + ")"}
-                </div>
-              </div>
-            </div>
-            <div className="card_section">
-              <div className="card_title">별명</div>
-              <div className="card_value">{nickName}</div>
-            </div>
-          </IonCardContent>
-        </IonCard>
-        <div>
-          <div className="frined_title">
-            <h4>앨범을 공유하는 사람</h4>
+  
+  return useObserver(()=>{
+    return (
+      
+      <IonPage>
+        <IonHeader>
+          <IonToolbar>
+            <IonTitle>
+              <div className="toolbar">내 정보</div>
+            </IonTitle>
+          </IonToolbar>
+        </IonHeader>
+        <IonContent className="ion-padding">
+          <div>
+            <div></div>
           </div>
-          <div className="freind_list">
-            <IonChip>
-              <IonAvatar>
-                {picUrl ? (
-                  <>
-                    <img src={picUrl} />
-                  </>
-                ) : (
-                  <>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </>
-                )}
-              </IonAvatar>
-              <IonLabel>여자친구</IonLabel>
-            </IonChip>
-            <IonChip>
-              <IonAvatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-              </IonAvatar>
-              <IonLabel>친구1</IonLabel>
-            </IonChip>
-            <IonChip>
-              <IonAvatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-              </IonAvatar>
-              <IonLabel>친구2</IonLabel>
-            </IonChip>
-            <IonChip>
-              <IonAvatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-              </IonAvatar>
-              <IonLabel>엄마</IonLabel>
-            </IonChip>
-            <IonChip>
-              <IonAvatar>
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-              </IonAvatar>
-              <IonLabel>아빠</IonLabel>
-            </IonChip>
+          <IonCard>
+            <IonCardHeader>
+              <IonCardSubtitle>{LoginStore.userInfo.relation}</IonCardSubtitle>
+              <IonCardTitle>
+                <div className="user_title">
+                  <div className="user_pic">
+                    <IonAvatar>
+                      <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" />
+                    </IonAvatar>
+                  </div>
+                  <div>{LoginStore.userInfo.name}</div>
+                </div>
+              </IonCardTitle>
+            </IonCardHeader>
+            <IonCardContent>
+              <div className="card_section">
+                <div className="card_title">아이디</div>
+                <div className="card_value">{id}</div>
+              </div>
+              <div className="card_section">
+                <div className="card_title">생년월일</div>
+                <div className="card_value">{getYYYYMMDD(LoginStore.userInfo.birthday)}</div>
+              </div>
+              <div className="card_section">
+                <div className="card_title">{LoginStore.userInfo.anniversary}</div>
+                <div className="card_value">
+                  {getDDay(LoginStore.userInfo.anniversaryDate)}
+                  <div style={{ fontSize: "smaller" }}>
+                    {"(" + getYYYYMMDD(LoginStore.userInfo.anniversaryDate) + ")"}
+                  </div>
+                </div>
+              </div>
+              <div className="card_section">
+                <div className="card_title">별명</div>
+                <div className="card_value">{LoginStore.userInfo.nickName}</div>
+              </div>
+            </IonCardContent>
+          </IonCard>
+          <div>
+            <div className="frined_title">
+              <h4>앨범을 공유하는 사람</h4>
+            </div>
+            <div className="freind_list">
+              <IonChip>
+                <IonAvatar>
+                  {LoginStore.userInfo.picUrl ? (
+                    <>
+                      <img src={LoginStore.userInfo.picUrl} />
+                    </>
+                  ) : (
+                    <>
+                      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                    </>
+                  )}
+                </IonAvatar>
+                <IonLabel>여자친구</IonLabel>
+              </IonChip>
+              <IonChip>
+                <IonAvatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                </IonAvatar>
+                <IonLabel>친구1</IonLabel>
+              </IonChip>
+              <IonChip>
+                <IonAvatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                </IonAvatar>
+                <IonLabel>친구2</IonLabel>
+              </IonChip>
+              <IonChip>
+                <IonAvatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                </IonAvatar>
+                <IonLabel>엄마</IonLabel>
+              </IonChip>
+              <IonChip>
+                <IonAvatar>
+                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                </IonAvatar>
+                <IonLabel>아빠</IonLabel>
+              </IonChip>
+            </div>
           </div>
-        </div>
-
-        <div className="btn_logout">
-          <IonButton expand="full" onClick={logOut}>
-            로그아웃
-          </IonButton>
-        </div>
-        <div className="btn_quit">
-          <IonButton
-            expand="full"
-            color="light"
-            onClick={() => history.push("/my/modify")}
-          >
-            정보수정
-          </IonButton>
-        </div>
-        <div className="btn_quit">
-          <IonButton expand="full" color="light">
-            회원탈퇴
-          </IonButton>
-        </div>
-      </IonContent>
-    </IonPage>
-  );
+  
+          <div className="btn_logout">
+            <IonButton expand="full" onClick={logOut}>
+              로그아웃
+            </IonButton>
+          </div>
+          <div className="btn_quit">
+            <IonButton
+              expand="full"
+              color="light"
+              onClick={() => history.push("/my/modify")}
+            >
+              정보수정
+            </IonButton>
+          </div>
+          <div className="btn_quit">
+            <IonButton expand="full" color="light">
+              회원탈퇴
+            </IonButton>
+          </div>
+        </IonContent>
+      </IonPage>
+    );
+  })
 };
-
+  
 export default MyPage;

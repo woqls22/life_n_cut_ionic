@@ -48,6 +48,7 @@
     align-items: center;
 }
 .container_avartar{
+  margin-bottom: 3vh;
 }
 .back{
   border: 3px solid transparent;
