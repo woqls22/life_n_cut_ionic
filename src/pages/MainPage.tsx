@@ -13,6 +13,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
 import ExploreContainer from "../components/ExploreContainer";
 import "../Styles/Home.css";
@@ -25,11 +26,18 @@ import dDay from "../res/6.jpeg";
 import { useEffect, useState } from "react";
 import SkeletonLoading from "../components/SkeletonLoading";
 import { useHistory } from "react-router";
+import { AlbumDO } from "./MyPage";
+import { SpringAxios } from "../Utils/Utils";
+interface Album {
+  Album: AlbumDO;
+}
 const MainPage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
-  const history=useHistory();
+  const history = useHistory();
   const [open, setOpen] = useState(false);
-  const [albumName, setAlbumName]=useState("");
+  const [albumName, setAlbumName] = useState("");
+  const [present] = useIonAlert();
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -41,6 +49,29 @@ const MainPage: React.FC = () => {
     // setPosition(e.target.scrollTop);
     // console.log(position);
   }
+  const enrollAlbum = () => {
+    // id: string;
+    // albumName: string;
+    // createdate: string;
+    // dday: string;
+    // description: string;
+    // ddayDescription: string;
+    // authorIdList: string[];
+    SpringAxios.post(
+      `/album/${localStorage.getItem("userid")}`,
+      new AlbumDO(
+          "",
+          albumName,
+          new Date().toString(),
+          "",
+          []
+        ),
+    )
+      .then((res: any) => {})
+      .catch(() => {
+        present("서버에러 ] 앨범을 생성할 수 없습니다", [{ text: "Ok" }]);
+      });
+  };
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
@@ -62,28 +93,44 @@ const MainPage: React.FC = () => {
       ) : (
         <>
           <IonContent className="ion-padding">
-            <IonButton expand="full" onClick={()=>setOpen(true)}>앨범 만들기</IonButton>
+            <IonButton expand="full" onClick={() => setOpen(true)}>
+              앨범 만들기
+            </IonButton>
             <IonListHeader>
               <IonLabel>내가 속한 앨범</IonLabel>
             </IonListHeader>
             <IonList>
               <IonItem>
-              <div className="user_title" style={{width:"100%"}} onClick={()=>{history.push("/album/1")}}>
-                <div className="user_pic">
-                  <IonAvatar>
-                  <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" /> </IonAvatar>
+                <div
+                  className="user_title"
+                  style={{ width: "100%" }}
+                  onClick={() => {
+                    history.push("/album/1");
+                  }}
+                >
+                  <div className="user_pic">
+                    <IonAvatar>
+                      <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" />{" "}
+                    </IonAvatar>
+                  </div>
+                  <div>앨범1</div>
                 </div>
-                <div>앨범1</div>
-              </div>
               </IonItem>
               <IonItem>
-              <div className="user_title" style={{width:"100%"}} onClick={()=>{history.push("/album/2")}}>
-                <div className="user_pic">
-                  <IonAvatar>
-                  <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" /> </IonAvatar>
+                <div
+                  className="user_title"
+                  style={{ width: "100%" }}
+                  onClick={() => {
+                    history.push("/album/2");
+                  }}
+                >
+                  <div className="user_pic">
+                    <IonAvatar>
+                      <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" />{" "}
+                    </IonAvatar>
+                  </div>
+                  <div>앨범2</div>
                 </div>
-                <div>앨범2</div>
-              </div>
               </IonItem>
             </IonList>
             <IonModal isOpen={open}>
@@ -99,7 +146,7 @@ const MainPage: React.FC = () => {
                 </IonItem>
                 <IonButton
                   onClick={() => {
-                    //버킷리스트 추가 post요청
+                    enrollAlbum();
                   }}
                   expand="full"
                   style={{ marginBottom: "2vh" }}

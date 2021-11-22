@@ -37,25 +37,19 @@ export class AlbumDO {
   id: string;
   albumName: string;
   createdate: string;
-  dday: string;
   description: string;
-  ddayDescription: string;
   authorIdList: string[];
   constructor(
     id: string,
     albumName: string,
     createdate: string,
-    dday: string,
     description: string,
-    ddayDescription: string,
     authorIdList: string[]
   ) {
     this.id = id;
     this.albumName = albumName;
     this.createdate = createdate;
-    this.dday = dday;
     this.description = description;
-    this.ddayDescription = ddayDescription;
     this.authorIdList = authorIdList;
   }
 }
