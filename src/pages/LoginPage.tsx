@@ -59,10 +59,10 @@ const LoginPage: React.FC = () => {
         headerconfig
       )
       .then((res:any) => {
+          console.log(res.data);
           LoginStore.setLoginInfo(new LoginInfoDO(id));
           LoginStore.setLoginDialogVariable(false);
           LoginStore.setIsLoggedIn(true);
-          
           const accessToken = res.data.token as string;
           localStorage.setItem(
             "userInfo",

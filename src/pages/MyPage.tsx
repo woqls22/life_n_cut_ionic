@@ -24,7 +24,7 @@ import {useObserver} from "mobx-react";
 import "../Styles/Home.css";
 import { useEffect, useState } from "react";
 import "../Styles/Mypage.css";
-import LoginStore, { LoginInfoDO } from "../Store/LoginStore";
+import LoginStore, { LoginInfoDO, UserDO } from "../Store/LoginStore";
 import axios from "axios";
 import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD, getDDay } from "../Utils/Utils";
@@ -84,7 +84,7 @@ const MyPage: React.FC = () => {
       let userId = localStorage.getItem("userid");
       let accessToken = localStorage.getItem("accessToken");
       axios
-        .get(rootURL + "/user/" + userId, {
+        .get(rootURL + "/users/" + userId, {
           headers: {
             Authorization: "Bearer " + accessToken, //the token is a variable which holds the token
           },
@@ -94,10 +94,9 @@ const MyPage: React.FC = () => {
           setId(res.data.email);
           LoginStore.userInfo.nickName=res.data.nickname;
           LoginStore.userInfo.relation=res.data.relation;
-          LoginStore.userInfo.anniversaryDate=res.data.anniversaryDate;
+          LoginStore.userInfo.anniversary=res.data.anniversary;
           LoginStore.userInfo.name = res.data.name;
           LoginStore.userInfo.picUrl = res.data.pickUrl;
-          LoginStore.userInfo.anniversary = res.data.anniversary;
           LoginStore.userInfo.birthday = res.data.birthday;
           setShowLoading(false);
         });
@@ -143,11 +142,11 @@ const MyPage: React.FC = () => {
                 <div className="card_value">{getYYYYMMDD(LoginStore.userInfo.birthday)}</div>
               </div>
               <div className="card_section">
-                <div className="card_title">{LoginStore.userInfo.anniversary}</div>
+                <div className="card_title">{LoginStore.userInfo.anniversary.description}</div>
                 <div className="card_value">
-                  {getDDay(LoginStore.userInfo.anniversaryDate)}
+                  {getDDay(LoginStore.userInfo.anniversary.anniversaryDate)}
                   <div style={{ fontSize: "smaller" }}>
-                    {"(" + getYYYYMMDD(LoginStore.userInfo.anniversaryDate) + ")"}
+                    {"(" + getYYYYMMDD(LoginStore.userInfo.anniversary.anniversaryDate) + ")"}
                   </div>
                 </div>
               </div>
@@ -162,7 +161,10 @@ const MyPage: React.FC = () => {
               <h4>앨범을 공유하는 사람</h4>
             </div>
             <div className="freind_list">
-              <IonChip>
+              {LoginStore.friendsList.map((user:UserDO)=>{
+                return(
+                <>
+                <IonChip>
                 <IonAvatar>
                   {LoginStore.userInfo.picUrl ? (
                     <>
@@ -176,6 +178,9 @@ const MyPage: React.FC = () => {
                 </IonAvatar>
                 <IonLabel>여자친구</IonLabel>
               </IonChip>
+                </>);
+              })}
+             
               <IonChip>
                 <IonAvatar>
                   <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />

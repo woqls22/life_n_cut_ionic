@@ -2,6 +2,9 @@ import axios from "axios";
 import { rootURL } from "./Constants";
 
 export function getYYYYMMDD(dtr: string) {
+    if(!dtr){
+      return "";
+    }
     if (dtr.length == 0) {
       return "";
     }

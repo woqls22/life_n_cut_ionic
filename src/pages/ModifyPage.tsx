@@ -21,7 +21,7 @@ import { useHistory } from "react-router";
 import "../Styles/Home.css";
 import { arrowBack, cloudUpload } from "ionicons/icons";
 import "../Styles/Login.css";
-import LoginStore, { LoginInfoDO, UserDO } from "../Store/LoginStore";
+import LoginStore, { Anniversary, LoginInfoDO, UserDO } from "../Store/LoginStore";
 import { rootURL } from "../Utils/Constants";
 import axios from "axios";
 import crypto from "crypto";
@@ -30,22 +30,21 @@ const ModifyPage: React.FC = () => {
   const history = useHistory();
   const [present] = useIonAlert();
   const postLoginInfo = async () => {
-    SpringAxios.put(`/user/${localStorage.getItem("userid")}`, JSON.stringify({
+    SpringAxios.put(`/users/${localStorage.getItem("userid")}`, JSON.stringify({
       nickname: LoginStore.userInfo.nickName,
       birthday: LoginStore.userInfo.birthday,
       name: LoginStore.userInfo.name,
       anniversary: LoginStore.userInfo.anniversary,
-      anniversaryDate: LoginStore.userInfo.anniversaryDate,
+      anniversaryDate: LoginStore.userInfo.anniversary.anniversaryDate,
       relation: LoginStore.userInfo.relation,
       picUrl:LoginStore.userInfo.picUrl
     })).then((res:any) => {
         LoginStore.userInfo=new UserDO(
           res.data.nickname,
           res.data.relation,
-          res.data.anniversaryDate,
           res.data.name,
           res.data.pickUrl,
-          res.data.anniversary,
+          new Anniversary(res.data.anniversary.anniversaryDate,res.data.anniversary.description, res.data.anniversary.relation),
           res.data.birthday
         )
         LoginStore.fetchUserInfo().then(()=>{
@@ -121,10 +120,10 @@ const ModifyPage: React.FC = () => {
         <IonItem>
           <IonLabel position="stacked">기념일 (수식어)</IonLabel>
           <IonInput
-            value={LoginStore.userInfo.anniversary}
+            value={LoginStore.userInfo.anniversary.description}
             placeholder="우리 만난지"
             type="text"
-            onIonChange={(e) => LoginStore.userInfo.anniversary=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.anniversary.description=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -132,18 +131,18 @@ const ModifyPage: React.FC = () => {
           <IonDatetime
             displayFormat="YYYY.MM.DD"
             min="1900-01-01"
-            value={LoginStore.userInfo.anniversaryDate}
+            value={LoginStore.userInfo.anniversary.anniversaryDate}
             placeholder="2000.01.01"
-            onIonChange={(e) => LoginStore.userInfo.anniversaryDate=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.anniversary.anniversaryDate=e.detail.value!}
           ></IonDatetime>
         </IonItem>
         <IonItem>
           <IonLabel position="stacked">상대와의 관계</IonLabel>
           <IonInput
-            value={LoginStore.userInfo.relation}
+            value={LoginStore.userInfo.anniversary.relation}
             placeholder="OO의 남자친구"
             type="text"
-            onIonChange={(e) => LoginStore.userInfo.relation=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.anniversary.relation=e.detail.value!}
           ></IonInput>
         </IonItem>
         <div className="my_modify_btn">
