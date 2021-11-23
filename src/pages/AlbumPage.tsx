@@ -33,6 +33,7 @@ import {
   map
 } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
+import AlbumStore from "../Store/AlbumStore";
 const AlbumPage: React.FC = (props: any) => {
   const [showLoading, setShowLoading] = useState(false);
   const params = useParams<{ albumId: string }>();
@@ -72,7 +73,7 @@ const AlbumPage: React.FC = (props: any) => {
             </IonButton>
           </IonButtons>
           <IonTitle>
-            <div className="toolbar">ALBUM {params.albumId}</div>
+            <div className="toolbar">{AlbumStore.ClickedAlbum!.albumName}</div>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -82,7 +83,6 @@ const AlbumPage: React.FC = (props: any) => {
         <>
           <IonContent className="ion-padding">
             <IonListHeader>
-              <IonLabel>앨범이름</IonLabel>
             </IonListHeader>
             {[1, 2, 3, 4, 5].map(() => {
               return (
