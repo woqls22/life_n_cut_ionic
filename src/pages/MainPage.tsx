@@ -30,12 +30,16 @@ import { AlbumDO } from "./MyPage";
 import { SpringAxios } from "../Utils/Utils";
 import AlbumStore from "../Store/AlbumStore";
 import { useObserver } from "mobx-react";
-import { Album } from "../Data/AlbumDO";
+import { Album, enrollAlbum } from "../Data/AlbumDO";
+import LoginStore, { Anniversary } from "../Store/LoginStore";
 const MainPage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(true);
   const history = useHistory();
   const [open, setOpen] = useState(false);
   const [albumName, setAlbumName] = useState("");
+  const [relation, setRelation] = useState("");
+  const [description, setDescription] = useState("");
+  const [anniversaryDate, setAnniversaryDate] = useState("");
   const [present] = useIonAlert();
 
   const handleClickOpen = () => {
@@ -49,16 +53,6 @@ const MainPage: React.FC = () => {
     // setPosition(e.target.scrollTop);
     // console.log(position);
   }
-  const enrollAlbum = () => {
-    SpringAxios.post(
-      `/albums/${localStorage.getItem("userid")}`,
-      new AlbumDO("", albumName, new Date().toString(), "", [])
-    )
-      .then((res: any) => {})
-      .catch(() => {
-        present("서버에러 ] 앨범을 생성할 수 없습니다", [{ text: "Ok" }]);
-      });
-  };
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
@@ -98,7 +92,8 @@ const MainPage: React.FC = () => {
                         style={{ width: "100%" }}
                         onClick={() => {
                           history.push(`/album/${item.id}`);
-                          AlbumStore.ClickedAlbum=item;
+                          AlbumStore.ClickedAlbum = item;
+                          console.log(AlbumStore.ClickedAlbum.userMapping);
                         }}
                       >
                         <div className="user_pic">
@@ -123,9 +118,59 @@ const MainPage: React.FC = () => {
                       onIonChange={(e) => setAlbumName(e.detail.value!)}
                     ></IonInput>
                   </IonItem>
+                  <IonLabel position="stacked">대표 기념일</IonLabel>
+                  <IonItem style={{ marginTop: "2vh", marginBottom: "2vh" }}>
+                    <IonDatetime
+                      displayFormat="YYYY.MM.DD"
+                      min="1900-01-01"
+                      value={anniversaryDate}
+                      placeholder="2000.01.01"
+                      onIonChange={(e) => setAnniversaryDate(e.detail.value!)}
+                    ></IonDatetime>
+                  </IonItem>
+                  <IonLabel position="stacked">기념일 설명</IonLabel>
+                  <IonItem style={{ marginTop: "2vh", marginBottom: "2vh" }}>
+                    <IonInput
+                      value={description}
+                      placeholder="ex) 우리 가족된 날"
+                      type="text"
+                      onIonChange={(e) => setDescription(e.detail.value!)}
+                    ></IonInput>
+                  </IonItem>
+                  <IonLabel position="stacked">앨범 참여자와의 관계</IonLabel>
+                  <IonItem style={{ marginTop: "2vh", marginBottom: "2vh" }}>
+                    <IonInput
+                      value={relation}
+                      placeholder="ex) 가족"
+                      type="text"
+                      onIonChange={(e) => setRelation(e.detail.value!)}
+                    ></IonInput>
+                  </IonItem>
                   <IonButton
                     onClick={() => {
-                      enrollAlbum();
+                      enrollAlbum(
+                        new Album(
+                          "",
+                          albumName,
+                          new Date().toString(),
+                          localStorage.getItem("userid")!,
+                          "description",
+                          new Date().toString(),
+                          localStorage.getItem("userid")!,
+                          [],
+                          new Anniversary(
+                            anniversaryDate,
+                            description,
+                            relation
+                          )
+                        )
+                      ).then(() => {
+                        setAlbumName("");
+                        setAnniversaryDate("");
+                        setDescription("");
+                        setRelation("");
+                        handleClose();
+                      });
                     }}
                     expand="full"
                     style={{ marginBottom: "2vh" }}

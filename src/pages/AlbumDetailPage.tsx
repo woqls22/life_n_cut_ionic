@@ -40,6 +40,9 @@ import {
   DialogActions,
   Button,
 } from "@mui/material";
+import AlbumStore from "../Store/AlbumStore";
+import { getDDay, getYYYYMMDD } from "../Utils/Utils";
+import { User } from "../Data/AlbumDO";
 export class WishItemDO {
   val: string;
   isChecked: boolean;
@@ -61,7 +64,7 @@ const checkboxList = [
 ];
 
 const AlbumDetailPage: React.FC = (props: any) => {
-  const [showLoading, setShowLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
   const [wishList, setWishList] = useState<WishItemDO[]>(checkboxList);
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
@@ -83,7 +86,9 @@ const AlbumDetailPage: React.FC = (props: any) => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
-    // album 정보를 가져오면 setShowLoading(false);
+    if (AlbumStore.ClickedAlbum) {
+      setShowLoading(false);
+    }
   }, []);
 
   return (
@@ -96,7 +101,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
             </IonButton>
           </IonButtons>
           <IonTitle>
-            <div className="toolbar">{params.albumId} 정보</div>
+            <div className="toolbar">{AlbumStore.ClickedAlbum!.albumName}</div>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -118,60 +123,58 @@ const AlbumDetailPage: React.FC = (props: any) => {
                         <img src="https://i.pinimg.com/564x/0d/8e/2f/0d8e2fd4c4e15ed96491d7f15a08ec04.jpg" />
                       </IonAvatar>
                     </div>
-                    <div>앨범이름요</div>
+                    <div>{AlbumStore.ClickedAlbum!.albumName}</div>
                   </div>
                 </IonCardTitle>
               </IonCardHeader>
               <IonCardContent>
                 <div className="card_section">
                   <div className="card_title">앨범 생성일</div>
-                  <div className="card_value">2021.01.01</div>
+                  <div className="card_value">
+                    {getYYYYMMDD(AlbumStore.ClickedAlbum!.createdate)}
+                  </div>
                 </div>
                 <div className="card_section">
                   <div className="card_title">기념일</div>
                   <div className="card_value">
-                    600일
-                    <div style={{ fontSize: "smaller" }}>20.01.01</div>
+                    {getDDay(
+                      AlbumStore.ClickedAlbum!.anniversary!.anniversaryDate
+                    )}
+                    <div style={{ fontSize: "smaller" }}>
+                      {getYYYYMMDD(
+                        AlbumStore.ClickedAlbum!.anniversary!.anniversaryDate
+                      )}
+                    </div>
                   </div>
                 </div>
               </IonCardContent>
             </IonCard>
             <div>
-              <div className="frined_title">
-                <h4>앨범을 공유하는 사람</h4>
-              </div>
-              <div className="freind_list">
-                <IonChip>
-                  <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </IonAvatar>
-                  <IonLabel>여자친구</IonLabel>
-                </IonChip>
-                <IonChip>
-                  <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </IonAvatar>
-                  <IonLabel>친구1</IonLabel>
-                </IonChip>
-                <IonChip>
-                  <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </IonAvatar>
-                  <IonLabel>친구2</IonLabel>
-                </IonChip>
-                <IonChip>
-                  <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </IonAvatar>
-                  <IonLabel>엄마</IonLabel>
-                </IonChip>
-                <IonChip>
-                  <IonAvatar>
-                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                  </IonAvatar>
-                  <IonLabel>아빠</IonLabel>
-                </IonChip>
-              </div>
+              {AlbumStore.ClickedAlbum!.userMapping == null ? (
+                <></>
+              ) : (
+                <>
+                  {AlbumStore.ClickedAlbum!.userMapping.map((user: User) => {
+                    return (
+                      <>
+                        <div className="frined_title">
+                          <h4>앨범을 함께 공유하는 사람</h4>
+                        </div>
+                        <div className="freind_list">
+                          <>
+                            <IonChip>
+                              <IonAvatar>
+                                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                              </IonAvatar>
+                              <IonLabel>{user.name}</IonLabel>
+                            </IonChip>
+                          </>
+                        </div>
+                      </>
+                    );
+                  })}
+                </>
+              )}
             </div>
 
             <div className="bucket_list_container">
@@ -230,7 +233,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
                 </IonItem>
                 <IonButton
                   onClick={() => {
-                      //버킷리스트 추가 post요청
+                    //버킷리스트 추가 post요청
                   }}
                   expand="full"
                   style={{ marginBottom: "2vh" }}

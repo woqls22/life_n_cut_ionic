@@ -9,16 +9,16 @@ import { SpringAxios } from "../Utils/Utils";
 // authorIdList: string[];
 interface AlbumStore {
   AlbumList: Album[];
-  ClickedAlbum:Album|null;
+  ClickedAlbum: Album | null;
   fetchAlbumList: () => Promise<void>;
 }
 const AlbumStore = observable<AlbumStore>({
   AlbumList: [],
-  ClickedAlbum:null,
+  ClickedAlbum: null,
   async fetchAlbumList() {
     const albumList = await getAlbumList();
     if (albumList) this.AlbumList = albumList;
-    console.log(this.AlbumList)
+    console.log(this.AlbumList);
     if (!albumList) {
       //못받아온 경우
     }
