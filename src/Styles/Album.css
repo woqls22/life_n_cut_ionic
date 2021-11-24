@@ -233,6 +233,28 @@
   display: flex;
   justify-content: flex-end;
 }
+.input-file-button{
+  padding-left: 50vw;
+  padding-right: 50vw;
+  padding-bottom:3vh;
+  padding-top: 3vh;
+  border-radius: 4px;
+  color: white;
+  cursor: pointer;
+}
+.profile_preview_box{
+  display: flex;
+  justify-content: center;
+  height: 30vh;
+  background-color: rgb(56, 54, 54);
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.profile_preview{
+    display: flex;
+    justify-content: center;
+    height: 28vh;
+}
 @keyframes fadein {
   from {
     opacity: 0;

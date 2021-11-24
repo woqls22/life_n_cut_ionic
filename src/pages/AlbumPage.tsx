@@ -30,7 +30,7 @@ import {
   menuOutline,
   trash,
   person,
-  map
+  map,
 } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import AlbumStore from "../Store/AlbumStore";
@@ -39,7 +39,10 @@ const AlbumPage: React.FC = (props: any) => {
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
   const [open, setOpen] = useState(false);
-  const [inviteId, setInviteId]=useState("");
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [inviteId, setInviteId] = useState("");
+  const [uploadedFile, setUploadFile] = useState<File>();
+  const [previewFile, setPreviewFile]=useState<any>();
   const [present] = useIonAlert();
 
   const handleClickOpen = () => {
@@ -53,8 +56,18 @@ const AlbumPage: React.FC = (props: any) => {
     // setPosition(e.target.scrollTop);
     // console.log(position);
   }
-  function alertInviteSuccess(){
-    present(inviteId+'님을 앨범에 초대했습니다', [{ text: 'Ok' }]);
+  function alertInviteSuccess() {
+    present(inviteId + "님을 앨범에 초대했습니다", [{ text: "Ok" }]);
+  }
+  function handleFileOnChange(event:any){
+    event.preventDefault();
+    let reader = new FileReader();
+    let file = event.target.files[0];
+    reader.onload=()=>{
+      setUploadFile(file);
+      setPreviewFile(reader.result);
+    }
+    reader.readAsDataURL(file);
   }
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
@@ -82,8 +95,7 @@ const AlbumPage: React.FC = (props: any) => {
       ) : (
         <>
           <IonContent className="ion-padding">
-            <IonListHeader>
-            </IonListHeader>
+            <IonListHeader></IonListHeader>
             {[1, 2, 3, 4, 5].map(() => {
               return (
                 <div
@@ -126,16 +138,24 @@ const AlbumPage: React.FC = (props: any) => {
                 <IonIcon icon={menuOutline} />
               </IonFabButton>
               <IonFabList side="top">
-                <IonFabButton>
+                <IonFabButton
+                  onClick={() => {
+                    setUploadModalOpen(true);
+                  }}
+                >
                   <IonIcon icon={image} />
                 </IonFabButton>
                 <IonFabButton
-                  onClick={() => {history.push(`/album/${params.albumId}/place`)}}
+                  onClick={() => {
+                    history.push(`/album/${params.albumId}/place`);
+                  }}
                 >
                   <IonIcon icon={map} />
                 </IonFabButton>
                 <IonFabButton
-                 onClick={() => history.push(`/album/${params.albumId}/anniversary`)}
+                  onClick={() =>
+                    history.push(`/album/${params.albumId}/anniversary`)
+                  }
                 >
                   <IonIcon icon={calendar} />
                 </IonFabButton>
@@ -145,18 +165,18 @@ const AlbumPage: React.FC = (props: any) => {
                   <IonIcon icon={informationCircle} />
                 </IonFabButton>
                 <IonFabButton
-                  onClick={() => {setOpen(true); setInviteId("")}}
+                  onClick={() => {
+                    setOpen(true);
+                    setInviteId("");
+                  }}
                 >
                   <IonIcon icon={person} />
                 </IonFabButton>
-               
               </IonFabList>
             </IonFab>
             <IonModal isOpen={open}>
               <div className="albumModal">
-                <IonLabel position="stacked">
-                  초대할 아이디
-                </IonLabel>
+                <IonLabel position="stacked">초대할 아이디</IonLabel>
                 <IonItem style={{ marginBottom: "10vh", marginTop: "2vh" }}>
                   <IonInput
                     value={inviteId}
@@ -166,32 +186,91 @@ const AlbumPage: React.FC = (props: any) => {
                 </IonItem>
                 <IonButton
                   onClick={() => {
-                      //앨범 초대
-                      let msg = `아이디 : ${inviteId}`
-                      present({
-                        header: '앨범 접근을 허용합니다',
-                        cssClass: 'my-css',
-                        message: msg,
-                        buttons: [
-                          { text: '확인', handler: (d) => {
+                    //앨범 초대
+                    let msg = `아이디 : ${inviteId}`;
+                    present({
+                      header: "앨범 접근을 허용합니다",
+                      cssClass: "my-css",
+                      message: msg,
+                      buttons: [
+                        {
+                          text: "확인",
+                          handler: (d) => {
                             console.log("앨범초대 api post");
                             setOpen(false);
                             alertInviteSuccess();
-                          }},
-                          '취소',
-                        ],
-                        onDidDismiss: (e) => {},
-                      })
-                     
+                          },
+                        },
+                        "취소",
+                      ],
+                      onDidDismiss: (e) => {},
+                    });
                   }}
                   expand="full"
                   style={{ marginBottom: "2vh" }}
-                  disabled={inviteId.length==0}
+                  disabled={inviteId.length == 0}
                 >
                   앨범 초대하기
                 </IonButton>
                 <IonButton
                   onClick={() => handleClose()}
+                  expand="full"
+                  color="light"
+                >
+                  닫기
+                </IonButton>
+              </div>
+            </IonModal>
+            <IonModal isOpen={uploadModalOpen}>
+              <div className="albumModal">
+                <IonLabel position="stacked">파일 업로드</IonLabel>
+                {uploadedFile&&
+                  <>
+                  <div className='profile_preview_box'>
+                    <div>
+                    <img className='profile_preview' src={previewFile}/>
+                    </div>
+                  </div>
+                  </>
+                  }
+                <IonButton
+                  expand="full"
+                  style={{ marginBottom: "2vh" }}
+                  color="dark"
+                >
+                  <div>
+                    <label className="input-file-button">
+                      사진 불러오기
+                      <input
+                        accept="image/*"
+                        style={{ display: "none" }}
+                        id="raised-button-file"
+                        type="file"
+                        onChange={(e: any) => {
+                         handleFileOnChange(e);
+                        }}
+                      />
+                    </label>
+                  </div>
+                </IonButton>
+
+                {/* </IonButton> */}
+                <IonButton
+                  onClick={() => {
+                    setUploadModalOpen(false);
+                    setUploadFile(undefined);
+                  }}
+                  expand="full"
+                  color="primary"
+                  style={{ marginBottom: "2vh" }}
+                >
+                  확인
+                </IonButton>
+                <IonButton
+                  onClick={() => {
+                    setUploadModalOpen(false);
+                    setUploadFile(undefined);
+                  }}
                   expand="full"
                   color="light"
                 >
