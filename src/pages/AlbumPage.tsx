@@ -3,6 +3,7 @@ import {
   IonButton,
   IonButtons,
   IonContent,
+  IonDatetime,
   IonFab,
   IonFabButton,
   IonFabList,
@@ -34,15 +35,22 @@ import {
 } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import AlbumStore from "../Store/AlbumStore";
+import { ImgFile, uploadImg } from "../Data/ImgFileDO";
+import { rootURL } from "../Utils/Constants";
+import { getYYYYMMDD } from "../Utils/Utils";
+import emptyPic from "../res/posting_photo.svg";
 const AlbumPage: React.FC = (props: any) => {
-  const [showLoading, setShowLoading] = useState(false);
+  const [showLoading, setShowLoading] = useState(true);
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
   const [open, setOpen] = useState(false);
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [inviteId, setInviteId] = useState("");
   const [uploadedFile, setUploadFile] = useState<File>();
-  const [previewFile, setPreviewFile]=useState<any>();
+  const [previewFile, setPreviewFile] = useState<any>();
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [page, setPage] = useState(0);
   const [present] = useIonAlert();
 
   const handleClickOpen = () => {
@@ -59,21 +67,23 @@ const AlbumPage: React.FC = (props: any) => {
   function alertInviteSuccess() {
     present(inviteId + "님을 앨범에 초대했습니다", [{ text: "Ok" }]);
   }
-  function handleFileOnChange(event:any){
+  function handleFileOnChange(event: any) {
     event.preventDefault();
     let reader = new FileReader();
     let file = event.target.files[0];
-    reader.onload=()=>{
+    reader.onload = () => {
       setUploadFile(file);
       setPreviewFile(reader.result);
-    }
+    };
     reader.readAsDataURL(file);
   }
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
-    // album 정보를 가져오면 setShowLoading(false);
+    AlbumStore.fetchImgsByPaging(params.albumId, page).then(() => {
+      setShowLoading(false);
+    });
   }, []);
 
   return (
@@ -81,7 +91,12 @@ const AlbumPage: React.FC = (props: any) => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="secondary">
-            <IonButton onClick={() => history.goBack()}>
+            <IonButton
+              onClick={() => {
+                history.goBack();
+                AlbumStore.ImgFileList = [];
+              }}
+            >
               <IonIcon slot="icon-only" icon={arrowBack} />
             </IonButton>
           </IonButtons>
@@ -95,8 +110,22 @@ const AlbumPage: React.FC = (props: any) => {
       ) : (
         <>
           <IonContent className="ion-padding">
-            <IonListHeader></IonListHeader>
-            {[1, 2, 3, 4, 5].map(() => {
+            {AlbumStore.ImgFileList.length === 0 && (
+              <>
+                <div
+                  className="posting_photo"
+                  style={{
+                    backgroundImage: `url(${emptyPic})`,
+                    marginBottom: "1%",
+                  }}
+                >
+                </div>
+                <div className="empty_text">
+                  아직 등록된 사진이 없어요
+                </div>
+              </>
+            )}
+            {AlbumStore.ImgFileList.map((item: ImgFile) => {
               return (
                 <div
                   className={"tabRow" + 1}
@@ -110,15 +139,14 @@ const AlbumPage: React.FC = (props: any) => {
                   <div
                     className={"photoListItem"}
                     style={{
-                      backgroundImage:
-                        "url(http://image.babosarang.co.kr/product/detail/NTY/2007211531153423/_600.jpg)",
+                      backgroundImage: `url(${rootURL}/imgURL?imagename=${item.filename})`,
                     }}
                   ></div>
                   <div className="albumtextbox">
                     <div className={"dateText"}>
-                      2020.01.01
+                      {getYYYYMMDD(item.date)}
                       <div className={"descriptionText"}>
-                        설명
+                        {item.description}
                         <IonIcon style={{ float: "right" }} icon={trash} />
                       </div>
                       <div></div>
@@ -127,7 +155,6 @@ const AlbumPage: React.FC = (props: any) => {
                 </div>
               );
             })}
-
             <IonFab
               vertical="bottom"
               horizontal="end"
@@ -222,17 +249,17 @@ const AlbumPage: React.FC = (props: any) => {
               </div>
             </IonModal>
             <IonModal isOpen={uploadModalOpen}>
-              <div className="albumModal">
+              <div className="photoEnrollModal">
                 <IonLabel position="stacked">파일 업로드</IonLabel>
-                {uploadedFile&&
+                {uploadedFile && (
                   <>
-                  <div className='profile_preview_box'>
-                    <div>
-                    <img className='profile_preview' src={previewFile}/>
+                    <div className="profile_preview_box">
+                      <div>
+                        <img className="profile_preview" src={previewFile} />
+                      </div>
                     </div>
-                  </div>
                   </>
-                  }
+                )}
                 <IonButton
                   expand="full"
                   style={{ marginBottom: "2vh" }}
@@ -247,18 +274,43 @@ const AlbumPage: React.FC = (props: any) => {
                         id="raised-button-file"
                         type="file"
                         onChange={(e: any) => {
-                         handleFileOnChange(e);
+                          handleFileOnChange(e);
                         }}
                       />
                     </label>
                   </div>
                 </IonButton>
-
-                {/* </IonButton> */}
+                <IonItem>
+                  <IonLabel position="stacked">사진 설명</IonLabel>
+                  <IonInput
+                    value={description}
+                    type="text"
+                    onIonChange={(e) => setDescription(e.detail.value!)}
+                  ></IonInput>
+                </IonItem>
+                <IonItem style={{ marginBottom: "5vh" }}>
+                  <IonLabel position="stacked">날짜</IonLabel>
+                  <IonDatetime
+                    displayFormat="YYYY.MM.DD"
+                    min="1900-01-01"
+                    value={date}
+                    placeholder="2000.01.01"
+                    onIonChange={(e) => setDate(e.detail.value!)}
+                  ></IonDatetime>
+                </IonItem>
                 <IonButton
                   onClick={() => {
-                    setUploadModalOpen(false);
-                    setUploadFile(undefined);
+                    uploadImg(
+                      uploadedFile!,
+                      date,
+                      params.albumId,
+                      description
+                    ).then((res) => {
+                      setUploadModalOpen(false);
+                      setUploadFile(undefined);
+                      setDate("");
+                      setDescription("");
+                    });
                   }}
                   expand="full"
                   color="primary"
@@ -270,6 +322,8 @@ const AlbumPage: React.FC = (props: any) => {
                   onClick={() => {
                     setUploadModalOpen(false);
                     setUploadFile(undefined);
+                    setDate("");
+                    setDescription("");
                   }}
                   expand="full"
                   color="light"

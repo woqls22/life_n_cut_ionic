@@ -228,6 +228,27 @@
     margin-left: auto;
     margin-right: auto;
 }
+.posting_photo{
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+  margin-top: 15vh;
+  height: 30vh;
+}
+.empty_text{
+  text-align: center;
+  font-family: "Yeon Sung", cursive;
+  margin-top: 7vh;
+}
+.photoEnrollModal{
+  width: 90vw;
+  margin-top: 10vh;
+  margin-left: auto;
+  margin-right: auto;
+}
 .anniversary_enroll_btn{
   width: 100%;
   display: flex;
