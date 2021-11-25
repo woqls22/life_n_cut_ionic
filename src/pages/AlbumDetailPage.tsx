@@ -154,13 +154,13 @@ const AlbumDetailPage: React.FC = (props: any) => {
                 <></>
               ) : (
                 <>
-                  {AlbumStore.ClickedAlbum!.userMapping.map((user: User) => {
-                    return (
-                      <>
-                        <div className="frined_title">
-                          <h4>앨범을 함께 공유하는 사람</h4>
-                        </div>
-                        <div className="freind_list">
+                  <div className="frined_title">
+                    <h4>앨범을 함께 공유하는 사람</h4>
+                  </div>
+                  <div className="freind_list">
+                    {AlbumStore.ClickedAlbum!.userMapping.map((user: User) => {
+                      return (
+                        <>
                           <>
                             <IonChip>
                               <IonAvatar>
@@ -169,10 +169,10 @@ const AlbumDetailPage: React.FC = (props: any) => {
                               <IonLabel>{user.name}</IonLabel>
                             </IonChip>
                           </>
-                        </div>
-                      </>
-                    );
-                  })}
+                        </>
+                      );
+                    })}
+                  </div>
                 </>
               )}
             </div>

@@ -29,6 +29,9 @@ export const uploadImg = async (
   formData.append("description", description);
   formData.append("fileName", file.name);
   SpringAxios.post(`/img/${albumId}`, formData)
-    .then((res: any) => {})
+    .then((res: any) => {
+        AlbumStore.ImgFileList=[];
+        AlbumStore.fetchImgsByPaging(albumId,0);
+    })
     .catch(() => {});
 };

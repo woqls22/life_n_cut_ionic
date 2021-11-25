@@ -1,6 +1,7 @@
 import AlbumStore from "../Store/AlbumStore";
 import { Anniversary } from "../Store/LoginStore";
 import { SpringAxios } from "../Utils/Utils";
+import { ImgFile } from "./ImgFileDO";
 
 export class User {
   constructor(
@@ -32,7 +33,7 @@ export const getAlbumList = async () => {
   );
   if (response) return response.data;
 };
-export const enrollAlbum = async (item: Album) => {
+export const enrollAlbum = async (item: Album) => { 
   SpringAxios.post(`/albums/${localStorage.getItem("userid")}`, item)
     .then((res: any) => {
       if (res) AlbumStore.fetchAlbumList();
@@ -41,3 +42,29 @@ export const enrollAlbum = async (item: Album) => {
       return null;
     });
 };
+export const deletePhoto = async(photoId:string)=>{
+    SpringAxios.delete(`/album/${photoId}`)
+    .then((res: any) => {
+      if (res) {
+          let imgList:ImgFile[]=[];
+          AlbumStore.ImgFileList.map((item:ImgFile)=>{
+            if(item.fileId != photoId){
+                imgList.push(item);
+            }
+          })
+          AlbumStore.ImgFileList=[...imgList];
+      }
+    })
+    .catch(() => {
+      return null;
+    }); 
+}
+export const inviteMember = async (albumId:string, memberId:string) => { 
+    SpringAxios.post(`/invite/${albumId}/${memberId}`)
+      .then((res: any) => {
+        if (res) AlbumStore.fetchAlbumList();
+      })
+      .catch(() => {
+        return null;
+      });
+  };
