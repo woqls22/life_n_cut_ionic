@@ -45,7 +45,8 @@ const ModifyPage: React.FC = () => {
           res.data.name,
           res.data.pickUrl,
           new Anniversary(res.data.anniversary.anniversaryDate,res.data.anniversary.description, res.data.anniversary.relation),
-          res.data.birthday
+          res.data.birthday,
+          ""
         )
         LoginStore.fetchUserInfo().then(()=>{
           present("정보 수정이 완료되었습니다.", [
@@ -120,10 +121,10 @@ const ModifyPage: React.FC = () => {
         <IonItem>
           <IonLabel position="stacked">기념일 (수식어)</IonLabel>
           <IonInput
-            value={LoginStore.userInfo.anniversary.description}
+            value={LoginStore.userInfo.anniversary.anniversaryDate}
             placeholder="우리 만난지"
             type="text"
-            onIonChange={(e) => LoginStore.userInfo.anniversary.description=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.anniversary.anniversaryDate=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
@@ -139,10 +140,10 @@ const ModifyPage: React.FC = () => {
         <IonItem>
           <IonLabel position="stacked">상대와의 관계</IonLabel>
           <IonInput
-            value={LoginStore.userInfo.anniversary.relation}
+            value={LoginStore.userInfo.relation}
             placeholder="OO의 남자친구"
             type="text"
-            onIonChange={(e) => LoginStore.userInfo.anniversary.relation=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.relation=e.detail.value!}
           ></IonInput>
         </IonItem>
         <div className="my_modify_btn">

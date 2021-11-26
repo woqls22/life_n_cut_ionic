@@ -39,7 +39,7 @@ import { ImgFile, uploadImg } from "../Data/ImgFileDO";
 import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD } from "../Utils/Utils";
 import emptyPic from "../res/posting_photo.svg";
-import { deletePhoto, inviteMember } from "../Data/AlbumDO";
+import { deletePhoto, inviteMember, User } from "../Data/AlbumDO";
 import { useObserver } from "mobx-react";
 const AlbumPage: React.FC = (props: any) => {
   const [showLoading, setShowLoading] = useState(true);
@@ -54,7 +54,14 @@ const AlbumPage: React.FC = (props: any) => {
   const [date, setDate] = useState("");
   const [page, setPage] = useState(0);
   const [present] = useIonAlert();
-
+  function alreadyInvited(){
+    AlbumStore.ClickedAlbum?.userMapping.map((item:User)=>{
+      if(item.email==inviteId){
+        return true;
+      }
+    })
+    return false;
+  }
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -234,17 +241,19 @@ const AlbumPage: React.FC = (props: any) => {
                                 console.log("앨범초대 api post");
                                 setOpen(false);
                                 alertInviteSuccess();
+                              }).catch((e)=>{
+                                console.log("실패")
                               })
                             },
                           },
                           "취소",
                         ],
-                        onDidDismiss: (e) => {},
+                        onDidDismiss: (e) => {console.log("종료")},
                       });
                     }}
                     expand="full"
                     style={{ marginBottom: "2vh" }}
-                    disabled={inviteId.length == 0}
+                    disabled={inviteId.length == 0 || alreadyInvited()}
                   >
                     앨범 초대하기
                   </IonButton>
@@ -324,6 +333,7 @@ const AlbumPage: React.FC = (props: any) => {
                     expand="full"
                     color="primary"
                     style={{ marginBottom: "2vh" }}
+                    disabled={!uploadedFile}
                   >
                     확인
                   </IonButton>

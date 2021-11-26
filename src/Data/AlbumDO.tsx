@@ -1,3 +1,4 @@
+import { IonAlert } from "@ionic/react";
 import AlbumStore from "../Store/AlbumStore";
 import { Anniversary } from "../Store/LoginStore";
 import { rootURL } from "../Utils/Constants";
@@ -64,9 +65,6 @@ export const inviteMember = async (albumId:string, memberId:string) => {
     SpringAxios.post(`/invite/${albumId}/${memberId}`)
       .then((res: any) => {
         if (res) AlbumStore.fetchAlbumList();
-      })
-      .catch(() => {
-        return null;
       });
   };
   export const deleteAlbum = async (albumId:string) => { 

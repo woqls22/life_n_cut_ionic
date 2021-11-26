@@ -20,6 +20,17 @@ export class UserDO{
         public picUrl:string,
         public anniversary:Anniversary,
         public birthday:string,
+        public email:string,
+    ){}
+}
+export class Friend{
+    constructor(
+        public nickName :string,
+        public name:string,
+        public picUrl:string,
+        public anniversary:Anniversary,
+        public birthday:string,
+        public email:string,
     ){}
 }
 
@@ -28,7 +39,7 @@ interface LoginStore {
   isLoggedIn:boolean;
   loginInfo:LoginInfoDO;
   userInfo:UserDO;
-  friendsList:UserDO[];
+  friendsList:Friend[];
   setLoginDialogVariable:(flag:boolean)=>void;
   setIsLoggedIn:(flag:boolean)=>void;
   setLoginInfo:(data:LoginInfoDO)=>void;
@@ -39,7 +50,7 @@ const LoginStore = observable<LoginStore>({
     isLoggedIn:false,
     friendsList:[],
     loginInfo: new LoginInfoDO(""),
-    userInfo: new UserDO("","","","",new Anniversary("","",""),""),
+    userInfo: new UserDO("","","","",new Anniversary("","",""),"",""),
     setLoginDialogVariable(flag){
         this.openLoginDialog=flag;
     },

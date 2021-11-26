@@ -24,7 +24,7 @@ import {useObserver} from "mobx-react";
 import "../Styles/Home.css";
 import { useEffect, useState } from "react";
 import "../Styles/Mypage.css";
-import LoginStore, { LoginInfoDO, UserDO } from "../Store/LoginStore";
+import LoginStore, { Friend, LoginInfoDO, UserDO } from "../Store/LoginStore";
 import axios from "axios";
 import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD, getDDay } from "../Utils/Utils";
@@ -84,7 +84,6 @@ const MyPage: React.FC = () => {
           },
         })
         .then((res: any) => {
-          console.log(res.data);
           setId(res.data.email);
           LoginStore.userInfo.nickName=res.data.nickname;
           LoginStore.userInfo.relation=res.data.relation;
@@ -92,6 +91,7 @@ const MyPage: React.FC = () => {
           LoginStore.userInfo.name = res.data.name;
           LoginStore.userInfo.picUrl = res.data.pickUrl;
           LoginStore.userInfo.birthday = res.data.birthday;
+          LoginStore.friendsList=res.data.friends;
           setShowLoading(false);
         });
     }
@@ -155,14 +155,14 @@ const MyPage: React.FC = () => {
               <h4>앨범을 공유하는 사람</h4>
             </div>
             <div className="freind_list">
-              {LoginStore.friendsList.map((user:UserDO)=>{
+              {LoginStore.friendsList.map((user:Friend)=>{
                 return(
                 <>
                 <IonChip>
                 <IonAvatar>
-                  {LoginStore.userInfo.picUrl ? (
+                  {user.picUrl ? (
                     <>
-                      <img src={LoginStore.userInfo.picUrl} />
+                      <img src={user.picUrl} />
                     </>
                   ) : (
                     <>
@@ -170,35 +170,10 @@ const MyPage: React.FC = () => {
                     </>
                   )}
                 </IonAvatar>
-                <IonLabel>여자친구</IonLabel>
+                <IonLabel>{user.name}</IonLabel>
               </IonChip>
                 </>);
               })}
-             
-              <IonChip>
-                <IonAvatar>
-                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                </IonAvatar>
-                <IonLabel>친구1</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonAvatar>
-                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                </IonAvatar>
-                <IonLabel>친구2</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonAvatar>
-                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                </IonAvatar>
-                <IonLabel>엄마</IonLabel>
-              </IonChip>
-              <IonChip>
-                <IonAvatar>
-                  <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                </IonAvatar>
-                <IonLabel>아빠</IonLabel>
-              </IonChip>
             </div>
           </div>
   
