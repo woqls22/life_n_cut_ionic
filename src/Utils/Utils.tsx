@@ -19,7 +19,7 @@ export function getYYYYMMDD(dtr: string) {
     const now = new Date();
     const distance = now.getTime() - setDate.getTime();
     const day = Math.floor(distance / (1000 * 60 * 60 * 24)) + 1;
-    let text = `${day}일`;
+    let text = `${day}일째`;
     return text;
   }
   export const headers = {

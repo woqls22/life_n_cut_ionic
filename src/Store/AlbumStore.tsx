@@ -1,5 +1,5 @@
 import { observable, ObservableSet } from "mobx";
-import { Album, getAlbumList } from "../Data/AlbumDO";
+import { Album, getAlbumList, getAlbumWithId } from "../Data/AlbumDO";
 import { getImgsByPaging, ImgFile } from "../Data/ImgFileDO";
 import { AlbumDO } from "../pages/MyPage";
 import { SpringAxios } from "../Utils/Utils";
@@ -14,6 +14,7 @@ interface AlbumStore {
   ImgFileList:ImgFile[];
   fetchAlbumList: () => Promise<void>;
   fetchImgsByPaging:(albumId:string, page:number)=>Promise<void>;
+  clickAlbum:(albumId:string)=>Promise<void>;
 }
 const AlbumStore = observable<AlbumStore>({
   AlbumList: [],
@@ -27,6 +28,14 @@ const AlbumStore = observable<AlbumStore>({
       //못받아온 경우
     }
   },
+  async clickAlbum(albumId:string){
+    const target = await getAlbumWithId(albumId);
+    if(target) this.ClickedAlbum=target;
+    if(!target){
+        
+    }
+  }
+  ,
   async fetchImgsByPaging(albumId:string, page:number){
       const imgs = await getImgsByPaging(page,albumId)
       if (imgs) this.ImgFileList = this.ImgFileList.concat(imgs);

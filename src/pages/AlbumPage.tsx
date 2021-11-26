@@ -83,9 +83,13 @@ const AlbumPage: React.FC = (props: any) => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
-    AlbumStore.fetchImgsByPaging(params.albumId, page).then(() => {
-      setShowLoading(false);
-    });
+    AlbumStore.clickAlbum(params.albumId).then(()=>{
+      if (AlbumStore.ClickedAlbum) {
+        AlbumStore.fetchImgsByPaging(params.albumId, page).then(() => {
+        setShowLoading(false);
+        });
+      }
+    })
   }, []);
 
   return useObserver(()=>{
@@ -104,7 +108,7 @@ const AlbumPage: React.FC = (props: any) => {
               </IonButton>
             </IonButtons>
             <IonTitle>
-              <div className="toolbar">{AlbumStore.ClickedAlbum!.albumName}</div>
+              <div className="toolbar">{AlbumStore.ClickedAlbum?<>{AlbumStore.ClickedAlbum!.albumName}</>:<>로딩중</>}</div>
             </IonTitle>
           </IonToolbar>
         </IonHeader>

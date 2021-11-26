@@ -20,6 +20,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonAlert,
 } from "@ionic/react";
 import "../Styles/Home.css";
 import "../Styles/Album.css";
@@ -42,7 +43,8 @@ import {
 } from "@mui/material";
 import AlbumStore from "../Store/AlbumStore";
 import { getDDay, getYYYYMMDD } from "../Utils/Utils";
-import { User } from "../Data/AlbumDO";
+import { deleteAlbum, User } from "../Data/AlbumDO";
+import { FrontURL, rootURL } from "../Utils/Constants";
 export class WishItemDO {
   val: string;
   isChecked: boolean;
@@ -69,6 +71,8 @@ const AlbumDetailPage: React.FC = (props: any) => {
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
   const [wishItem, setWishItem] = useState("");
+  const [present] = useIonAlert();
+
   function onScroll(e: any) {
     console.log(e);
     // setPosition(e.target.scrollTop);
@@ -86,9 +90,11 @@ const AlbumDetailPage: React.FC = (props: any) => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
-    if (AlbumStore.ClickedAlbum) {
-      setShowLoading(false);
-    }
+    AlbumStore.clickAlbum(params.albumId).then(()=>{
+      if (AlbumStore.ClickedAlbum) {
+        setShowLoading(false);
+      }
+    })
   }, []);
 
   return (
@@ -101,7 +107,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
             </IonButton>
           </IonButtons>
           <IonTitle>
-            <div className="toolbar">{AlbumStore.ClickedAlbum!.albumName}</div>
+          <div className="toolbar">{AlbumStore.ClickedAlbum?<>{AlbumStore.ClickedAlbum!.albumName}</>:<>로딩중</>}</div>
           </IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -135,7 +141,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
                   </div>
                 </div>
                 <div className="card_section">
-                  <div className="card_title">기념일</div>
+                  <div className="card_title">대표 기념일</div>
                   <div className="card_value">
                     {getDDay(
                       AlbumStore.ClickedAlbum!.anniversary!.anniversaryDate
@@ -218,6 +224,32 @@ const AlbumDetailPage: React.FC = (props: any) => {
                 ))}
               </IonList>
             </div>
+            <IonButton
+                    onClick={() => {
+                      present({
+                        header: "앨범을 삭제합니다",
+                        cssClass: "my-css",
+                        message: "삭제된 앨범은 복구할 수 없습니다.",
+                        buttons: [
+                          {
+                            text: "확인",
+                            handler: (d) => {
+                              deleteAlbum(params.albumId).then(()=>{
+                                window.location.assign(`${FrontURL}/album`);
+                              })
+                            },
+                          },
+                          "취소",
+                        ],
+                        onDidDismiss: (e) => {},
+                      });
+                    }}
+                    expand="full"
+                    color="primary"
+                    style={{ marginBottom: "2vh" }}
+                  >
+                    앨범 삭제하기
+                  </IonButton>
             <IonModal isOpen={open}>
               <div className="albumModal">
                 <IonLabel position="stacked">

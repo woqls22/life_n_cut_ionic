@@ -92,8 +92,6 @@ const MainPage: React.FC = () => {
                         style={{ width: "100%" }}
                         onClick={() => {
                           history.push(`/album/${item.id}`);
-                          AlbumStore.ClickedAlbum = item;
-                          console.log(AlbumStore.ClickedAlbum.userMapping);
                         }}
                       >
                         <div className="user_pic">
