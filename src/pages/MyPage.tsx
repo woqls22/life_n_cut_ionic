@@ -20,7 +20,7 @@ import {
   IonToolbar,
   useIonAlert,
 } from "@ionic/react";
-import {useObserver} from "mobx-react";
+import { useObserver } from "mobx-react";
 import "../Styles/Home.css";
 import { useEffect, useState } from "react";
 import "../Styles/Mypage.css";
@@ -85,21 +85,20 @@ const MyPage: React.FC = () => {
         })
         .then((res: any) => {
           setId(res.data.email);
-          LoginStore.userInfo.nickName=res.data.nickname;
-          LoginStore.userInfo.relation=res.data.relation;
-          LoginStore.userInfo.anniversary=res.data.anniversary;
+          LoginStore.userInfo.nickName = res.data.nickname;
+          LoginStore.userInfo.relation = res.data.relation;
+          LoginStore.userInfo.anniversary = res.data.anniversary;
           LoginStore.userInfo.name = res.data.name;
           LoginStore.userInfo.picUrl = res.data.pickUrl;
           LoginStore.userInfo.birthday = res.data.birthday;
-          LoginStore.friendsList=res.data.friends;
+          LoginStore.friendsList = res.data.friends;
           setShowLoading(false);
         });
     }
   }, []);
-  
-  return useObserver(()=>{
+
+  return useObserver(() => {
     return (
-      
       <IonPage>
         <IonHeader>
           <IonToolbar>
@@ -133,14 +132,22 @@ const MyPage: React.FC = () => {
               </div>
               <div className="card_section">
                 <div className="card_title">생년월일</div>
-                <div className="card_value">{getYYYYMMDD(LoginStore.userInfo.birthday)}</div>
+                <div className="card_value">
+                  {getYYYYMMDD(LoginStore.userInfo.birthday)}
+                </div>
               </div>
               <div className="card_section">
-                <div className="card_title">{LoginStore.userInfo.anniversary.description}</div>
+                <div className="card_title">
+                  {LoginStore.userInfo.anniversary.description}
+                </div>
                 <div className="card_value">
                   {getDDay(LoginStore.userInfo.anniversary.anniversaryDate)}
                   <div style={{ fontSize: "smaller" }}>
-                    {"(" + getYYYYMMDD(LoginStore.userInfo.anniversary.anniversaryDate) + ")"}
+                    {"(" +
+                      getYYYYMMDD(
+                        LoginStore.userInfo.anniversary.anniversaryDate
+                      ) +
+                      ")"}
                   </div>
                 </div>
               </div>
@@ -152,31 +159,38 @@ const MyPage: React.FC = () => {
           </IonCard>
           <div>
             <div className="frined_title">
-              <h4>앨범을 공유하는 사람</h4>
+              <h4>나와 앨범을 공유하는 사람</h4>
             </div>
             <div className="freind_list">
-              {LoginStore.friendsList.map((user:Friend)=>{
-                return(
-                <>
-                <IonChip>
-                <IonAvatar>
-                  {user.picUrl ? (
-                    <>
-                      <img src={user.picUrl} />
-                    </>
-                  ) : (
-                    <>
-                      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                    </>
-                  )}
-                </IonAvatar>
-                <IonLabel>{user.name}</IonLabel>
-              </IonChip>
-                </>);
+              {LoginStore.friendsList.map((user: Friend) => {
+                return (
+                  <>
+                    {LoginStore.userInfo.email === user.email ? (
+                      <></>
+                    ) : (
+                      <>
+                        <IonChip>
+                          <IonAvatar>
+                            {user.picUrl ? (
+                              <>
+                                <img src={user.picUrl} />
+                              </>
+                            ) : (
+                              <>
+                                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                              </>
+                            )}
+                          </IonAvatar>
+                          <IonLabel>{user.name}</IonLabel>
+                        </IonChip>
+                      </>
+                    )}
+                  </>
+                );
               })}
             </div>
           </div>
-  
+
           <div className="btn_logout">
             <IonButton expand="full" onClick={logOut}>
               로그아웃
@@ -199,7 +213,7 @@ const MyPage: React.FC = () => {
         </IonContent>
       </IonPage>
     );
-  })
+  });
 };
-  
+
 export default MyPage;
