@@ -62,7 +62,6 @@ const AlbumStore = observable<AlbumStore>({
       }
   },
   initialize(){
-      this.ClickedAlbum=null;
       this.ImgFileList=[];
       this.WishList=[];
   }

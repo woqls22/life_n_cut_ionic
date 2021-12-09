@@ -83,9 +83,9 @@ const AlbumPage: React.FC = (props: any) => {
    
   }
   useIonViewWillEnter(async () => {
+    AlbumStore.initialize();
     await fetchData();
   });
-
   function alreadyInvited() {
     AlbumStore.ClickedAlbum?.userMapping.map((item: User) => {
       if (item.email == inviteId) {

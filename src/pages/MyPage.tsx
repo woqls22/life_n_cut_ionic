@@ -30,6 +30,7 @@ import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD, getDDay } from "../Utils/Utils";
 import SkeletonLoading from "../components/SkeletonLoading";
 import { useHistory } from "react-router";
+import AlbumStore from "../Store/AlbumStore";
 class UserInfo {
   constructor(id: string, username: string, token: string) {}
 }
