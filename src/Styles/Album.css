@@ -276,6 +276,20 @@
     justify-content: center;
     height: 28vh;
 }
+.wishList{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  
+}
+.wishList ion-item{
+  width:75vw;
+  margin-right:10px
+}
+.wishList > ion-checkbox{
+  margin-right: 5px;
+}  
+
 @keyframes fadein {
   from {
     opacity: 0;

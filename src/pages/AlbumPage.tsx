@@ -161,7 +161,24 @@ const AlbumPage: React.FC = (props: any) => {
                         {getYYYYMMDD(item.date)}
                         <div className={"descriptionText"}>
                           {item.description}
-                          <IonIcon style={{ float: "right" }} icon={trash} onClick={()=>{deletePhoto(item.fileId)}} />
+                          <IonIcon style={{ float: "right" }} icon={trash} onClick={()=>{
+                             present({
+                              header: "사진을 삭제합니다",
+                              cssClass: "my-css",
+                              message: "삭제된 사진은 복구할 수 없습니다.",
+                              buttons: [
+                                {
+                                  text: "확인",
+                                  handler: (d) => {
+                                    deletePhoto(item.fileId);
+                                  },
+                                },
+                                "취소",
+                              ],
+                              onDidDismiss: (e) => {},
+                            });
+                            
+                           }} />
                         </div>
                         <div></div>
                       </div>

@@ -1,8 +1,10 @@
 import { observable, ObservableSet } from "mobx";
 import { Album, getAlbumList, getAlbumWithId } from "../Data/AlbumDO";
 import { getImgsByPaging, ImgFile } from "../Data/ImgFileDO";
+import { getWishList, Wish } from "../Data/WishDO";
 import { AlbumDO } from "../pages/MyPage";
 import { SpringAxios } from "../Utils/Utils";
+import _ from "lodash";
 // id: string;
 // albumName: string;
 // createdate: string;
@@ -12,14 +14,17 @@ interface AlbumStore {
   AlbumList: Album[];
   ClickedAlbum: Album | null;
   ImgFileList: ImgFile[];
+  WishList:Wish[];
   fetchAlbumList: () => Promise<void>;
   fetchImgsByPaging: (albumId: string, page: number) => Promise<void>;
+  fetchWishList:(albumId:string)=>Promise<void>;
   clickAlbum: (albumId: string) => Promise<void>;
 }
 const AlbumStore = observable<AlbumStore>({
   AlbumList: [],
   ClickedAlbum: null,
   ImgFileList: [],
+  WishList:[],
   async fetchAlbumList() {
     const albumList = await getAlbumList();
     if (albumList) this.AlbumList = albumList;
@@ -45,5 +50,12 @@ const AlbumStore = observable<AlbumStore>({
       //못받아온 경우
     }
   },
+  async fetchWishList(albumId){
+      const List = await getWishList(albumId);
+      if(List){
+          let items = [...List];
+          this.WishList=_.sortBy(items,'visited').reverse();
+      }
+  }
 });
 export default AlbumStore;
