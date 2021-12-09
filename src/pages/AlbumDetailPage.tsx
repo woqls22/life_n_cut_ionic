@@ -237,7 +237,6 @@ const AlbumDetailPage: React.FC = (props: any) => {
                             checkWishItem(item.id).then(() => {
                               item.visited = !item.visited;
                               let tmp = [...wishList];
-                              console.log(item.id + "비트반전!");
                               setWishList(tmp);
                             });
                           }}

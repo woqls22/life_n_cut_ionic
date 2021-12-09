@@ -9,6 +9,8 @@ import {
   IonFabList,
   IonHeader,
   IonIcon,
+  IonInfiniteScroll,
+  IonInfiniteScrollContent,
   IonInput,
   IonItem,
   IonLabel,
@@ -18,6 +20,7 @@ import {
   IonTitle,
   IonToolbar,
   useIonAlert,
+  useIonViewWillEnter,
 } from "@ionic/react";
 import "../Styles/Home.css";
 import "../Styles/Album.css";
@@ -35,7 +38,7 @@ import {
 } from "ionicons/icons";
 import { useHistory, useParams } from "react-router";
 import AlbumStore from "../Store/AlbumStore";
-import { ImgFile, uploadImg } from "../Data/ImgFileDO";
+import { getImgsByPaging, ImgFile, uploadImg } from "../Data/ImgFileDO";
 import { rootURL } from "../Utils/Constants";
 import { getYYYYMMDD } from "../Utils/Utils";
 import emptyPic from "../res/posting_photo.svg";
@@ -54,6 +57,35 @@ const AlbumPage: React.FC = (props: any) => {
   const [date, setDate] = useState("");
   const [page, setPage] = useState(0);
   const [present] = useIonAlert();
+  const [disableInfiniteScroll, setDisableInfiniteScroll] =
+    useState<boolean>(false);
+  async function fetchData() {
+    const imgs = await getImgsByPaging(page, params.albumId);
+    console.log(imgs);
+    if (imgs === undefined) {
+      setDisableInfiniteScroll(true);
+      return;
+    } else {
+      AlbumStore.ImgFileList = AlbumStore.ImgFileList.concat(imgs);
+      AlbumStore.ImgFileList = [...AlbumStore.ImgFileList];
+      setDisableInfiniteScroll(imgs.length < 5);
+      if (imgs.length === 5) {
+        setPage(page + 1);
+      }
+    }
+  }
+  async function searchNext($event: CustomEvent<void>) {
+    console.log("이벤트발생", $event);
+    setTimeout(async () =>{
+      await fetchData();
+      ($event.target as HTMLIonInfiniteScrollElement).complete();
+    },800)
+   
+  }
+  useIonViewWillEnter(async () => {
+    await fetchData();
+  });
+
   function alreadyInvited() {
     AlbumStore.ClickedAlbum?.userMapping.map((item: User) => {
       if (item.email == inviteId) {
@@ -93,9 +125,7 @@ const AlbumPage: React.FC = (props: any) => {
     AlbumStore.initialize();
     AlbumStore.clickAlbum(params.albumId).then(() => {
       if (AlbumStore.ClickedAlbum) {
-        AlbumStore.fetchImgsByPaging(params.albumId, page).then(() => {
-          setShowLoading(false);
-        });
+        setShowLoading(false);
       }
     });
   }, []);
@@ -117,7 +147,7 @@ const AlbumPage: React.FC = (props: any) => {
             </IonButtons>
             <IonTitle>
               <div className="toolbar">
-                {AlbumStore.ClickedAlbum!=null ? (
+                {AlbumStore.ClickedAlbum != null ? (
                   <>{AlbumStore.ClickedAlbum!.albumName}</>
                 ) : (
                   <>로딩중</>
@@ -130,7 +160,7 @@ const AlbumPage: React.FC = (props: any) => {
           <>{SkeletonLoading()}</>
         ) : (
           <>
-            <IonContent className="ion-padding">
+            <IonContent>
               {AlbumStore.ImgFileList.length === 0 && (
                 <>
                   <div
@@ -143,6 +173,7 @@ const AlbumPage: React.FC = (props: any) => {
                   <div className="empty_text">아직 등록된 사진이 없어요</div>
                 </>
               )}
+              <div className="photo-container">
               {AlbumStore.ImgFileList.map((item: ImgFile) => {
                 return (
                   <div
@@ -193,6 +224,7 @@ const AlbumPage: React.FC = (props: any) => {
                   </div>
                 );
               })}
+              </div>
               <IonFab
                 vertical="bottom"
                 horizontal="end"
@@ -356,12 +388,16 @@ const AlbumPage: React.FC = (props: any) => {
                         date,
                         params.albumId,
                         description
-                      ).then((res) => {
-                        setUploadModalOpen(false);
-                        setUploadFile(undefined);
-                        setDate("");
-                        setDescription("");
-                      });
+                      )
+                        .then((res) => {
+                          setUploadModalOpen(false);
+                          setUploadFile(undefined);
+                          setDate("");
+                          setDescription("");
+                        })
+                        .then(() => {
+                          window.location.assign(`/album/${params.albumId}`);
+                        });
                     }}
                     expand="full"
                     color="primary"
@@ -384,6 +420,18 @@ const AlbumPage: React.FC = (props: any) => {
                   </IonButton>
                 </div>
               </IonModal>
+              <IonInfiniteScroll
+                threshold="100px"
+                disabled={disableInfiniteScroll}
+                onIonInfinite={(e: CustomEvent<void>) => {
+                  searchNext(e);
+                }}
+              >
+                <IonInfiniteScrollContent
+                  className="ion-padding"
+                  loadingText="Loading..."
+                ></IonInfiniteScrollContent>
+              </IonInfiniteScroll>
             </IonContent>
           </>
         )}

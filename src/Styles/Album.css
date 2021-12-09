@@ -282,6 +282,9 @@
   justify-content: space-between;
   
 }
+.infinite-loading-spinner{
+  margin-top: 1vh;
+}
 .wishList ion-item{
   width:75vw;
   margin-right:10px
@@ -289,6 +292,9 @@
 .wishList > ion-checkbox{
   margin-right: 5px;
 }  
+.photo-container{
+  margin-bottom: 5vh;
+}
 
 @keyframes fadein {
   from {
