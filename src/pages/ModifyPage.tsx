@@ -121,10 +121,10 @@ const ModifyPage: React.FC = () => {
         <IonItem>
           <IonLabel position="stacked">기념일 (수식어)</IonLabel>
           <IonInput
-            value={LoginStore.userInfo.anniversary.anniversaryDate}
+            value={LoginStore.userInfo.anniversary.description}
             placeholder="우리 만난지"
             type="text"
-            onIonChange={(e) => LoginStore.userInfo.anniversary.anniversaryDate=e.detail.value!}
+            onIonChange={(e) => LoginStore.userInfo.anniversary.description=e.detail.value!}
           ></IonInput>
         </IonItem>
         <IonItem>
