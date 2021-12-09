@@ -19,6 +19,7 @@ interface AlbumStore {
   fetchImgsByPaging: (albumId: string, page: number) => Promise<void>;
   fetchWishList:(albumId:string)=>Promise<void>;
   clickAlbum: (albumId: string) => Promise<void>;
+  initialize:()=>void;
 }
 const AlbumStore = observable<AlbumStore>({
   AlbumList: [],
@@ -35,7 +36,10 @@ const AlbumStore = observable<AlbumStore>({
   },
   async clickAlbum(albumId: string) {
     const target = await getAlbumWithId(albumId);
-    if (target) this.ClickedAlbum = target;
+    console.log(target);
+    if (target) {
+        this.ClickedAlbum = target;
+    }
     if (!target) {
     }
   },
@@ -56,6 +60,11 @@ const AlbumStore = observable<AlbumStore>({
           let items = [...List];
           this.WishList=_.sortBy(items,'visited').reverse();
       }
+  },
+  initialize(){
+      this.ClickedAlbum=null;
+      this.ImgFileList=[];
+      this.WishList=[];
   }
 });
 export default AlbumStore;

@@ -57,6 +57,7 @@ const MainPage: React.FC = () => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
+    AlbumStore.initialize();
     AlbumStore.fetchAlbumList().then(() => {
       setShowLoading(false);
       console.log(AlbumStore.AlbumList);

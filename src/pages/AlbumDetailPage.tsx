@@ -108,7 +108,11 @@ const AlbumDetailPage: React.FC = (props: any) => {
         <IonHeader>
           <IonToolbar>
             <IonButtons slot="secondary">
-              <IonButton onClick={() => history.goBack()}>
+              <IonButton
+                onClick={() => {
+                  history.goBack();
+                }}
+              >
                 <IonIcon slot="icon-only" icon={arrowBack} />
               </IonButton>
             </IonButtons>
@@ -123,7 +127,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-        {showLoading ? (
+        {showLoading || AlbumStore.ClickedAlbum==null? (
           <>{SkeletonLoading()}</>
         ) : (
           <>
@@ -241,8 +245,8 @@ const AlbumDetailPage: React.FC = (props: any) => {
                         <div>
                           <IonIcon
                             icon={closeCircleOutline}
-                            style={{ color: "red", width:"6vw" }}
-                            onClick={()=>{
+                            style={{ color: "red", width: "6vw" }}
+                            onClick={() => {
                               present({
                                 header: "다음 버킷리스트를 삭제합니다 ",
                                 cssClass: "my-css",
@@ -251,9 +255,11 @@ const AlbumDetailPage: React.FC = (props: any) => {
                                   {
                                     text: "확인",
                                     handler: (d) => {
-                                      deleteWishItem(item.id).then(() =>{
-                                        window.location.assign(`album/${params.albumId}/info`);
-                                      })
+                                      deleteWishItem(item.id).then(() => {
+                                        window.location.assign(
+                                          `album/${params.albumId}/info`
+                                        );
+                                      });
                                     },
                                   },
                                   "취소",

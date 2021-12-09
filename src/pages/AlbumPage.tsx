@@ -54,12 +54,12 @@ const AlbumPage: React.FC = (props: any) => {
   const [date, setDate] = useState("");
   const [page, setPage] = useState(0);
   const [present] = useIonAlert();
-  function alreadyInvited(){
-    AlbumStore.ClickedAlbum?.userMapping.map((item:User)=>{
-      if(item.email==inviteId){
+  function alreadyInvited() {
+    AlbumStore.ClickedAlbum?.userMapping.map((item: User) => {
+      if (item.email == inviteId) {
         return true;
       }
-    })
+    });
     return false;
   }
   const handleClickOpen = () => {
@@ -90,16 +90,17 @@ const AlbumPage: React.FC = (props: any) => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
-    AlbumStore.clickAlbum(params.albumId).then(()=>{
+    AlbumStore.initialize();
+    AlbumStore.clickAlbum(params.albumId).then(() => {
       if (AlbumStore.ClickedAlbum) {
         AlbumStore.fetchImgsByPaging(params.albumId, page).then(() => {
-        setShowLoading(false);
+          setShowLoading(false);
         });
       }
-    })
+    });
   }, []);
 
-  return useObserver(()=>{
+  return useObserver(() => {
     return (
       <IonPage ref={onScroll}>
         <IonHeader>
@@ -115,7 +116,13 @@ const AlbumPage: React.FC = (props: any) => {
               </IonButton>
             </IonButtons>
             <IonTitle>
-              <div className="toolbar">{AlbumStore.ClickedAlbum?<>{AlbumStore.ClickedAlbum!.albumName}</>:<>로딩중</>}</div>
+              <div className="toolbar">
+                {AlbumStore.ClickedAlbum!=null ? (
+                  <>{AlbumStore.ClickedAlbum!.albumName}</>
+                ) : (
+                  <>로딩중</>
+                )}
+              </div>
             </IonTitle>
           </IonToolbar>
         </IonHeader>
@@ -132,11 +139,8 @@ const AlbumPage: React.FC = (props: any) => {
                       backgroundImage: `url(${emptyPic})`,
                       marginBottom: "1%",
                     }}
-                  >
-                  </div>
-                  <div className="empty_text">
-                    아직 등록된 사진이 없어요
-                  </div>
+                  ></div>
+                  <div className="empty_text">아직 등록된 사진이 없어요</div>
                 </>
               )}
               {AlbumStore.ImgFileList.map((item: ImgFile) => {
@@ -161,24 +165,27 @@ const AlbumPage: React.FC = (props: any) => {
                         {getYYYYMMDD(item.date)}
                         <div className={"descriptionText"}>
                           {item.description}
-                          <IonIcon style={{ float: "right" }} icon={trash} onClick={()=>{
-                             present({
-                              header: "사진을 삭제합니다",
-                              cssClass: "my-css",
-                              message: "삭제된 사진은 복구할 수 없습니다.",
-                              buttons: [
-                                {
-                                  text: "확인",
-                                  handler: (d) => {
-                                    deletePhoto(item.fileId);
+                          <IonIcon
+                            style={{ float: "right" }}
+                            icon={trash}
+                            onClick={() => {
+                              present({
+                                header: "사진을 삭제합니다",
+                                cssClass: "my-css",
+                                message: "삭제된 사진은 복구할 수 없습니다.",
+                                buttons: [
+                                  {
+                                    text: "확인",
+                                    handler: (d) => {
+                                      deletePhoto(item.fileId);
+                                    },
                                   },
-                                },
-                                "취소",
-                              ],
-                              onDidDismiss: (e) => {},
-                            });
-                            
-                           }} />
+                                  "취소",
+                                ],
+                                onDidDismiss: (e) => {},
+                              });
+                            }}
+                          />
                         </div>
                         <div></div>
                       </div>
@@ -218,7 +225,9 @@ const AlbumPage: React.FC = (props: any) => {
                     <IonIcon icon={calendar} />
                   </IonFabButton>
                   <IonFabButton
-                    onClick={() => history.push(`/album/${params.albumId}/info`)}
+                    onClick={() =>
+                      history.push(`/album/${params.albumId}/info`)
+                    }
                   >
                     <IonIcon icon={informationCircle} />
                   </IonFabButton>
@@ -254,18 +263,25 @@ const AlbumPage: React.FC = (props: any) => {
                           {
                             text: "확인",
                             handler: (d) => {
-                              inviteMember(AlbumStore.ClickedAlbum!.id, inviteId).then(()=>{
-                                console.log("앨범초대 api post");
-                                setOpen(false);
-                                alertInviteSuccess();
-                              }).catch((e)=>{
-                                console.log("실패")
-                              })
+                              inviteMember(
+                                AlbumStore.ClickedAlbum!.id,
+                                inviteId
+                              )
+                                .then(() => {
+                                  console.log("앨범초대 api post");
+                                  setOpen(false);
+                                  alertInviteSuccess();
+                                })
+                                .catch((e) => {
+                                  console.log("실패");
+                                });
                             },
                           },
                           "취소",
                         ],
-                        onDidDismiss: (e) => {console.log("종료")},
+                        onDidDismiss: (e) => {
+                          console.log("종료");
+                        },
                       });
                     }}
                     expand="full"
@@ -373,8 +389,7 @@ const AlbumPage: React.FC = (props: any) => {
         )}
       </IonPage>
     );
-  })
-  
+  });
 };
 
 export default AlbumPage;
