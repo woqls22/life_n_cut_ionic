@@ -295,7 +295,9 @@
 .photo-container{
   margin-bottom: 5vh;
 }
-
+.card_value{
+  margin-left: auto;
+}
 @keyframes fadein {
   from {
     opacity: 0;

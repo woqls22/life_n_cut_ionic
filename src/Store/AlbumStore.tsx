@@ -5,6 +5,7 @@ import { getWishList, Wish } from "../Data/WishDO";
 import { AlbumDO } from "../pages/MyPage";
 import { SpringAxios } from "../Utils/Utils";
 import _ from "lodash";
+import { AlbumAnniversary, getAnniversaries } from "../Data/AlbumAnniversaryDO";
 // id: string;
 // albumName: string;
 // createdate: string;
@@ -15,23 +16,34 @@ interface AlbumStore {
   ClickedAlbum: Album | null;
   ImgFileList: ImgFile[];
   WishList:Wish[];
+  anniversaryList:AlbumAnniversary[];
   fetchAlbumList: () => Promise<void>;
   fetchImgsByPaging: (albumId: string, page: number) => Promise<void>;
   fetchWishList:(albumId:string)=>Promise<void>;
+  fetchAnniversaryList:(albumId:string)=>Promise<void>;
   clickAlbum: (albumId: string) => Promise<void>;
   initialize:()=>void;
+  
 }
 const AlbumStore = observable<AlbumStore>({
   AlbumList: [],
   ClickedAlbum: null,
   ImgFileList: [],
   WishList:[],
+  anniversaryList:[],
   async fetchAlbumList() {
     const albumList = await getAlbumList();
     if (albumList) this.AlbumList = albumList;
     console.log(this.AlbumList);
     if (!albumList) {
       //못받아온 경우
+    }
+  },
+  async fetchAnniversaryList(albumId:string){
+    const anniversaries =  await getAnniversaries(albumId);
+    if(anniversaries) this.anniversaryList=anniversaries;
+    if(!anniversaries){
+         //못받아온 경우
     }
   },
   async clickAlbum(albumId: string) {
@@ -64,6 +76,7 @@ const AlbumStore = observable<AlbumStore>({
   initialize(){
       this.ImgFileList=[];
       this.WishList=[];
+      this.anniversaryList=[];
   }
 });
 export default AlbumStore;

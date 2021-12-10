@@ -127,7 +127,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
             </IonTitle>
           </IonToolbar>
         </IonHeader>
-        {showLoading || AlbumStore.ClickedAlbum==null? (
+        {showLoading || AlbumStore.ClickedAlbum == null ? (
           <>{SkeletonLoading()}</>
         ) : (
           <>
@@ -203,12 +203,29 @@ const AlbumDetailPage: React.FC = (props: any) => {
 
               <div className="bucket_list_container">
                 <div className="bucketList">
-                  <h4>버킷리스트</h4>
-                  <IonIcon
+                  <div className="anniversary_enroll_btn" style={{alignItems:"center"}}>
+                    <div style={{ marginRight: "auto", display:"flex", alignItems:"center" }}>
+                      <div>
+                        <IonIcon
+                          icon={calendarOutline}
+                          style={{ marginRight: "1vw", zoom:"1.9", marginTop: 4}}
+                        />
+                      </div>
+                      <div>
+                        <h4>버킷리스트</h4>
+                      </div>
+                    </div>
+                    <div>
+                      <IonButton onClick={() => setOpen(true)}  fill="outline" size="small">
+                        추가하기
+                      </IonButton>
+                    </div>
+                  </div>
+                  {/* <IonIcon
                     icon={calendarOutline}
                     style={{ marginLeft: "2vw" }}
                     onClick={() => setOpen(true)}
-                  />
+                  /> */}
                 </div>
                 <IonList>
                   {AlbumStore.WishList.map((item: Wish, i) => (
@@ -244,7 +261,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
                         <div>
                           <IonIcon
                             icon={closeCircleOutline}
-                            style={{ color: "red", width: "6vw" }}
+                            style={{ color: "red", width: "6vw", zoom:"1.1" }}
                             onClick={() => {
                               present({
                                 header: "다음 버킷리스트를 삭제합니다 ",
