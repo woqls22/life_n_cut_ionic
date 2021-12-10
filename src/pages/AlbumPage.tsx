@@ -229,7 +229,7 @@ const AlbumPage: React.FC = (props: any) => {
                 vertical="bottom"
                 horizontal="end"
                 slot="fixed"
-                style={{ position: "fixed" }}
+                style={{ position: "fixed", zIndex:"100", marginBottom:"80px"}}
               >
                 <IonFabButton>
                   <IonIcon icon={menuOutline} />
