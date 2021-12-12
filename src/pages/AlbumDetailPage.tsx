@@ -45,10 +45,12 @@ import {
 } from "@mui/material";
 import AlbumStore from "../Store/AlbumStore";
 import { getDDay, getYYYYMMDD } from "../Utils/Utils";
-import { deleteAlbum, removeFromAlbum, User } from "../Data/AlbumDO";
+import { Album, deleteAlbum, removeFromAlbum, User } from "../Data/AlbumDO";
 import { FrontURL, rootURL } from "../Utils/Constants";
 import { checkWishItem, deleteWishItem, postWish, Wish } from "../Data/WishDO";
 import { useObserver } from "mobx-react";
+import LoginStore from "../Store/LoginStore";
+import { userInfo } from "os";
 export class WishItemDO {
   val: string;
   isChecked: boolean;
@@ -186,19 +188,28 @@ const AlbumDetailPage: React.FC = (props: any) => {
                         (user: User) => {
                           return (
                             <>
-                              <>
-                                <IonChip
-                                  onClick={() => {
-                                    setClickedUser(user);
-                                    setDeleteModal(true);
-                                  }}
-                                >
-                                  <IonAvatar>
-                                    <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-                                  </IonAvatar>
-                                  <IonLabel>{user.name}</IonLabel>
-                                </IonChip>
-                              </>
+                              {user.email != localStorage.getItem("userid") ? (
+                                <>
+                                  <IonChip
+                                    onClick={() => {
+                                      if (
+                                        AlbumStore.ClickedAlbum?.ownerId ==
+                                        localStorage.getItem("userid")
+                                      ) {
+                                        setClickedUser(user);
+                                        setDeleteModal(true);
+                                      }
+                                    }}
+                                  >
+                                    <IonAvatar>
+                                      <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                                    </IonAvatar>
+                                    <IonLabel>{user.name}</IonLabel>
+                                  </IonChip>
+                                </>
+                              ) : (
+                                <></>
+                              )}
                             </>
                           );
                         }
@@ -314,32 +325,40 @@ const AlbumDetailPage: React.FC = (props: any) => {
                   ))}
                 </IonList>
               </div>
-              <IonButton
-                onClick={() => {
-                  present({
-                    header: "앨범을 삭제합니다",
-                    cssClass: "my-css",
-                    message: "삭제된 앨범은 복구할 수 없습니다.",
-                    buttons: [
-                      {
-                        text: "확인",
-                        handler: (d) => {
-                          deleteAlbum(params.albumId).then(() => {
-                            window.location.assign(`${FrontURL}/album`);
-                          });
-                        },
-                      },
-                      "취소",
-                    ],
-                    onDidDismiss: (e) => {},
-                  });
-                }}
-                expand="full"
-                color="primary"
-                style={{ marginBottom: "2vh" }}
-              >
-                앨범 삭제하기
-              </IonButton>
+              {AlbumStore.ClickedAlbum?.ownerId ==
+              localStorage.getItem("userid") ? (
+                <>
+                  <IonButton
+                    onClick={() => {
+                      present({
+                        header: "앨범을 삭제합니다",
+                        cssClass: "my-css",
+                        message: "삭제된 앨범은 복구할 수 없습니다.",
+                        buttons: [
+                          {
+                            text: "확인",
+                            handler: (d) => {
+                              deleteAlbum(params.albumId).then(() => {
+                                window.location.assign(`${FrontURL}/album`);
+                              });
+                            },
+                          },
+                          "취소",
+                        ],
+                        onDidDismiss: (e) => {},
+                      });
+                    }}
+                    expand="full"
+                    color="primary"
+                    style={{ marginBottom: "2vh" }}
+                  >
+                    앨범 삭제하기
+                  </IonButton>
+                </>
+              ) : (
+                <></>
+              )}
+
               <IonModal isOpen={open}>
                 <div className="albumModal">
                   <IonLabel position="stacked">
