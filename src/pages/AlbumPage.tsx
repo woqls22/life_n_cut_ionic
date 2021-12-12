@@ -76,11 +76,10 @@ const AlbumPage: React.FC = (props: any) => {
   }
   async function searchNext($event: CustomEvent<void>) {
     console.log("이벤트발생", $event);
-    setTimeout(async () =>{
+    setTimeout(async () => {
       await fetchData();
       ($event.target as HTMLIonInfiniteScrollElement).complete();
-    },800)
-   
+    }, 800);
   }
   useIonViewWillEnter(async () => {
     AlbumStore.initialize();
@@ -174,62 +173,66 @@ const AlbumPage: React.FC = (props: any) => {
                 </>
               )}
               <div className="photo-container">
-              {AlbumStore.ImgFileList.map((item: ImgFile) => {
-                return (
-                  <div
-                    className={"tabRow" + 1}
-                    style={{
-                      boxShadow: "none",
-                      marginLeft: "auto",
-                      marginRight: "auto",
-                      width: "70vw",
-                    }}
-                  >
+                {AlbumStore.ImgFileList.map((item: ImgFile) => {
+                  return (
                     <div
-                      className={"photoListItem"}
+                      className={"tabRow" + 1}
                       style={{
-                        backgroundImage: `url(${rootURL}/imgURL?imagename=${item.filename})`,
+                        boxShadow: "none",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        width: "70vw",
                       }}
-                    ></div>
-                    <div className="albumtextbox">
-                      <div className={"dateText"}>
-                        {getYYYYMMDD(item.date)}
-                        <div className={"descriptionText"}>
-                          {item.description}
-                          <IonIcon
-                            style={{ float: "right" }}
-                            icon={trash}
-                            onClick={() => {
-                              present({
-                                header: "사진을 삭제합니다",
-                                cssClass: "my-css",
-                                message: "삭제된 사진은 복구할 수 없습니다.",
-                                buttons: [
-                                  {
-                                    text: "확인",
-                                    handler: (d) => {
-                                      deletePhoto(item.fileId);
+                    >
+                      <div
+                        className={"photoListItem"}
+                        style={{
+                          backgroundImage: `url(${rootURL}/imgURL?imagename=${item.filename})`,
+                        }}
+                      ></div>
+                      <div className="albumtextbox">
+                        <div className={"dateText"}>
+                          {getYYYYMMDD(item.date)}
+                          <div className={"descriptionText"}>
+                            {item.description}
+                            <IonIcon
+                              style={{ float: "right" }}
+                              icon={trash}
+                              onClick={() => {
+                                present({
+                                  header: "사진을 삭제합니다",
+                                  cssClass: "my-css",
+                                  message: "삭제된 사진은 복구할 수 없습니다.",
+                                  buttons: [
+                                    {
+                                      text: "확인",
+                                      handler: (d) => {
+                                        deletePhoto(item.fileId);
+                                      },
                                     },
-                                  },
-                                  "취소",
-                                ],
-                                onDidDismiss: (e) => {},
-                              });
-                            }}
-                          />
+                                    "취소",
+                                  ],
+                                  onDidDismiss: (e) => {},
+                                });
+                              }}
+                            />
+                          </div>
+                          <div></div>
                         </div>
-                        <div></div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
               </div>
               <IonFab
                 vertical="bottom"
                 horizontal="end"
                 slot="fixed"
-                style={{ position: "fixed", zIndex:"100", marginBottom:"80px"}}
+                style={{
+                  position: "fixed",
+                  zIndex: "100",
+                  marginBottom: "50px",
+                }}
               >
                 <IonFabButton>
                   <IonIcon icon={menuOutline} />
