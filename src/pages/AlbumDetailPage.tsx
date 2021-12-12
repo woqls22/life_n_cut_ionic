@@ -45,7 +45,7 @@ import {
 } from "@mui/material";
 import AlbumStore from "../Store/AlbumStore";
 import { getDDay, getYYYYMMDD } from "../Utils/Utils";
-import { deleteAlbum, User } from "../Data/AlbumDO";
+import { deleteAlbum, removeFromAlbum, User } from "../Data/AlbumDO";
 import { FrontURL, rootURL } from "../Utils/Constants";
 import { checkWishItem, deleteWishItem, postWish, Wish } from "../Data/WishDO";
 import { useObserver } from "mobx-react";
@@ -75,6 +75,8 @@ const AlbumDetailPage: React.FC = (props: any) => {
   const params = useParams<{ albumId: string }>();
   const history = useHistory();
   const [wishItem, setWishItem] = useState("");
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [clickedUser, setClickedUser] = useState<User | null>(null);
   const [present] = useIonAlert();
 
   function onScroll(e: any) {
@@ -185,7 +187,12 @@ const AlbumDetailPage: React.FC = (props: any) => {
                           return (
                             <>
                               <>
-                                <IonChip>
+                                <IonChip
+                                  onClick={() => {
+                                    setClickedUser(user);
+                                    setDeleteModal(true);
+                                  }}
+                                >
                                   <IonAvatar>
                                     <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
                                   </IonAvatar>
@@ -203,12 +210,25 @@ const AlbumDetailPage: React.FC = (props: any) => {
 
               <div className="bucket_list_container">
                 <div className="bucketList">
-                  <div className="anniversary_enroll_btn" style={{alignItems:"center"}}>
-                    <div style={{ marginRight: "auto", display:"flex", alignItems:"center" }}>
+                  <div
+                    className="anniversary_enroll_btn"
+                    style={{ alignItems: "center" }}
+                  >
+                    <div
+                      style={{
+                        marginRight: "auto",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
                       <div>
                         <IonIcon
                           icon={calendarOutline}
-                          style={{ marginRight: "1vw", zoom:"1.9", marginTop: 4}}
+                          style={{
+                            marginRight: "1vw",
+                            zoom: "1.9",
+                            marginTop: 4,
+                          }}
                         />
                       </div>
                       <div>
@@ -216,7 +236,11 @@ const AlbumDetailPage: React.FC = (props: any) => {
                       </div>
                     </div>
                     <div>
-                      <IonButton onClick={() => setOpen(true)}  fill="outline" size="small">
+                      <IonButton
+                        onClick={() => setOpen(true)}
+                        fill="outline"
+                        size="small"
+                      >
                         추가하기
                       </IonButton>
                     </div>
@@ -261,7 +285,7 @@ const AlbumDetailPage: React.FC = (props: any) => {
                         <div>
                           <IonIcon
                             icon={closeCircleOutline}
-                            style={{ color: "red", width: "6vw", zoom:"1.1" }}
+                            style={{ color: "red", width: "6vw", zoom: "1.1" }}
                             onClick={() => {
                               present({
                                 header: "다음 버킷리스트를 삭제합니다 ",
@@ -352,6 +376,77 @@ const AlbumDetailPage: React.FC = (props: any) => {
                   </IonButton>
                   <IonButton
                     onClick={() => handleClose()}
+                    expand="full"
+                    color="light"
+                  >
+                    닫기
+                  </IonButton>
+                </div>
+              </IonModal>
+              <IonModal isOpen={deleteModal}>
+                <div className="albumModal">
+                  <div>
+                    {clickedUser === null ? (
+                      <></>
+                    ) : (
+                      <>
+                        <IonCard>
+                          <IonCardHeader>
+                            <div
+                              style={{ display: "flex", alignItems: "center" }}
+                            >
+                              <IonAvatar>
+                                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
+                              </IonAvatar>
+                              <div style={{ marginLeft: "4vw" }}>
+                                <IonCardTitle>{clickedUser.email}</IonCardTitle>
+                              </div>
+                            </div>
+                          </IonCardHeader>
+                          <IonCardContent>
+                            <div className="card_section">
+                              <div className="card_title">닉네임</div>
+                              <div className="card_value">
+                                {clickedUser.nickName}
+                              </div>
+                            </div>
+                            <div className="card_section">
+                              <div className="card_title">이름</div>
+                              <div className="card_value">
+                                {clickedUser.name}
+                              </div>
+                            </div>
+                          </IonCardContent>
+                        </IonCard>
+                      </>
+                    )}
+                  </div>
+                  <IonLabel position="stacked"></IonLabel>
+                  <IonButton
+                    onClick={() => {
+                      //앨범강퇴 api
+                      removeFromAlbum(params.albumId, clickedUser!.email).then(
+                        () => {
+                          AlbumStore.clickAlbum(params.albumId).then(() => {
+                            AlbumStore.fetchWishList(params.albumId).then(
+                              () => {
+                                if (AlbumStore.ClickedAlbum) {
+                                  setShowLoading(false);
+                                  setDeleteModal(false);
+                                }
+                              }
+                            );
+                          });
+                        }
+                      );
+                    }}
+                    expand="full"
+                    style={{ marginBottom: "2vh" }}
+                  >
+                    앨범에서 강퇴
+                  </IonButton>
+                  <IonButton
+                    onClick={() => setDeleteModal(false)}
                     expand="full"
                     color="light"
                   >

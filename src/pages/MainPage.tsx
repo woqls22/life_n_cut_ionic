@@ -161,7 +161,7 @@ const MainPage: React.FC = () => {
                             anniversaryDate,
                             description,
                             relation
-                          )
+                          ),""
                         )
                       ).then(() => {
                         setAlbumName("");

@@ -26,7 +26,8 @@ export class Album {
     public lastModifiedAt: string,
     public lastModifiedBy: string,
     public userMapping: User[],
-    public anniversary: Anniversary | null
+    public anniversary: Anniversary | null,
+    public ownerId: string
   ) {}
 }
 export const getAlbumList = async () => {
@@ -35,7 +36,7 @@ export const getAlbumList = async () => {
   );
   if (response) return response.data;
 };
-export const enrollAlbum = async (item: Album) => { 
+export const enrollAlbum = async (item: Album) => {
   SpringAxios.post(`/albums/${localStorage.getItem("userid")}`, item)
     .then((res: any) => {
       if (res) AlbumStore.fetchAlbumList();
@@ -44,44 +45,45 @@ export const enrollAlbum = async (item: Album) => {
       return null;
     });
 };
-export const deletePhoto = async(photoId:string)=>{
-    SpringAxios.delete(`/imgs/${photoId}`)
+export const deletePhoto = async (photoId: string) => {
+  SpringAxios.delete(`/imgs/${photoId}`)
     .then((res: any) => {
       if (res) {
-          let imgList:ImgFile[]=[];
-          AlbumStore.ImgFileList.map((item:ImgFile)=>{
-            if(item.fileId != photoId){
-                imgList.push(item);
-            }
-          })
-          AlbumStore.ImgFileList=[...imgList];
+        let imgList: ImgFile[] = [];
+        AlbumStore.ImgFileList.map((item: ImgFile) => {
+          if (item.fileId != photoId) {
+            imgList.push(item);
+          }
+        });
+        AlbumStore.ImgFileList = [...imgList];
       }
     })
     .catch(() => {
       return null;
-    }); 
-}
-export const inviteMember = async (albumId:string, memberId:string) => { 
-    SpringAxios.post(`/invite/${albumId}/${memberId}`)
-      .then((res: any) => {
-        if (res) AlbumStore.fetchAlbumList();
-      });
-  };
-  export const deleteAlbum = async (albumId:string) => { 
-    SpringAxios.delete(`/albums/${albumId}`)
-      .then((res: any) => {
-        if (res) {
-            AlbumStore.fetchAlbumList();
-            window.location.assign(`${rootURL}/album`);
-        }
-      })
-      .catch(() => {
-        return null;
-      });
-  };
-  export const getAlbumWithId=async(albumId:string)=>{
-    const response = await SpringAxios.get<Album>(
-        `albums/info/${albumId}`
-      );
-      if (response) return response.data;
-  }
+    });
+};
+export const inviteMember = async (albumId: string, memberId: string) => {
+  SpringAxios.post(`/invite/${albumId}/${memberId}`).then((res: any) => {
+    if (res) AlbumStore.fetchAlbumList();
+  });
+};
+export const deleteAlbum = async (albumId: string) => {
+  SpringAxios.delete(`/albums/${albumId}`)
+    .then((res: any) => {
+      if (res) {
+        AlbumStore.fetchAlbumList();
+        window.location.assign(`${rootURL}/album`);
+      }
+    })
+    .catch(() => {
+      return null;
+    });
+};
+export const getAlbumWithId = async (albumId: string) => {
+  const response = await SpringAxios.get<Album>(`albums/info/${albumId}`);
+  if (response) return response.data;
+};
+export const removeFromAlbum = async (albumId: string, email: string) => {
+  const response = await SpringAxios.delete(`blackusers/${email}/${albumId}`);
+  if (response) return response.data;
+};
