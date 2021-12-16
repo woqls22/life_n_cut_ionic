@@ -356,7 +356,38 @@ const AlbumDetailPage: React.FC = (props: any) => {
                   </IonButton>
                 </>
               ) : (
-                <></>
+                <>
+                  <IonButton
+                    onClick={() => {
+                      present({
+                        header: "앨범에서 나갑니다",
+                        cssClass: "my-css",
+                        message:
+                          "나간 앨범은 관리자가 초대하기 전까지 다시 참여할 수 없습니다.",
+                        buttons: [
+                          {
+                            text: "확인",
+                            handler: (d) => {
+                              removeFromAlbum(
+                                params.albumId,
+                                localStorage.getItem("userid")!
+                              ).then(() => {
+                                window.location.assign("/album");
+                              });
+                            },
+                          },
+                          "취소",
+                        ],
+                        onDidDismiss: (e) => {},
+                      });
+                    }}
+                    expand="full"
+                    color="primary"
+                    style={{ marginBottom: "2vh" }}
+                  >
+                    앨범 나가기
+                  </IonButton>
+                </>
               )}
 
               <IonModal isOpen={open}>

@@ -60,7 +60,6 @@ const MainPage: React.FC = () => {
     AlbumStore.initialize();
     AlbumStore.fetchAlbumList().then(() => {
       setShowLoading(false);
-      console.log(AlbumStore.AlbumList);
     });
   }, []);
   return useObserver(() => {
@@ -161,7 +160,8 @@ const MainPage: React.FC = () => {
                             anniversaryDate,
                             description,
                             relation
-                          ),""
+                          ),
+                          ""
                         )
                       ).then(() => {
                         setAlbumName("");
