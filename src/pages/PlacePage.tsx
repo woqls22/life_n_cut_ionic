@@ -30,15 +30,40 @@ import {
   checkmarkCircleOutline,
   trashBinOutline,
   map,
-  arrowBack
+  arrowBack,
 } from "ionicons/icons";
 import { WishItemDO } from "./AlbumDetailPage";
 import { useHistory } from "react-router";
+import React from "react";
 const checkboxList = [
-  { val: "카페 공백", isChecked: true, id: "1" },
-  { val: "에버랜드", isChecked: false, id: "2" },
-  { val: "평창 양떼목장", isChecked: false, id: "3" },
-  { val: "춘천 남이섬", isChecked: false, id: "4" },
+  {
+    val: "카페 공백",
+    isChecked: true,
+    id: "1",
+    latitude: 37.3594701,
+    longitude: 127.105389,
+  },
+  {
+    val: "에버랜드",
+    isChecked: false,
+    id: "2",
+    latitude: 37.2592703,
+    longitude: 127.105389,
+  },
+  {
+    val: "평창 양떼목장",
+    isChecked: false,
+    id: "3",
+    latitude: 37.4591702,
+    longitude: 127.105389,
+  },
+  {
+    val: "춘천 남이섬",
+    isChecked: false,
+    id: "4",
+    latitude: 37.5590705,
+    longitude: 127.105389,
+  },
 ];
 const PlacePage: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -48,22 +73,58 @@ const PlacePage: React.FC = () => {
   const [anniversaryDate, setAnniversaryDate] = useState("");
   const history = useHistory();
   const [open, setOpen] = useState(false);
+  const [naverMap, setNaverMap] = useState<naver.maps.Map>();
   const handleClose = () => {
     setOpen(false);
   };
+
+  const mapStyle = {
+    width: "100%",
+    height: "320px",
+  };
+
   useEffect(() => {
     if (!localStorage.getItem("userInfo")) {
       window.location.assign("/login");
     }
+    const initMap = () => {
+      setNaverMap(
+        new naver.maps.Map("map", {
+          center: new naver.maps.LatLng(37.3595704, 127.105399),
+          scaleControl: false,
+          logoControl: false,
+          mapDataControl: false,
+          zoomControl: true,
+          minZoom: 6,
+          zoomControlOptions: {
+            //줌 컨트롤의 옵션
+            position: naver.maps.Position.TOP_RIGHT,
+          },
+        })
+      );
+    };
+    initMap();
   }, []);
+  const addMark = (isChecked: boolean, latitude: number, longitude: number) => {
+    if (isChecked) {
+      var marker = new naver.maps.Marker({
+        position: new naver.maps.LatLng(latitude, longitude),
+        map: naverMap,
+      });
+      naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
+    } else {
+      naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
+    }
+  };
   if (showLoading) {
     return <>{SkeletonLoading()}</>;
   }
+
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-        <IonButtons slot="secondary">
+          <IonButtons slot="secondary">
             <IonButton onClick={() => history.goBack()}>
               <IonIcon slot="icon-only" icon={arrowBack} />
             </IonButton>
@@ -76,12 +137,11 @@ const PlacePage: React.FC = () => {
       <IonContent className="ion-padding">
         <IonCard>
           <IonCardHeader>
-          <IonCardTitle>PLACE🚀</IonCardTitle>
+            <IonCardTitle>PLACE🚀</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
-            <div style={{ backgroundColor: "black", height: "30vh" }}>
-              지도가 들어가는 자리, <br />
-              등록해놓은 곳에 핀이 꽂힙니다.
+            <div style={{ height: "40vh" }}>
+              <div id="map" style={mapStyle}></div>
             </div>
           </IonCardContent>
         </IonCard>
@@ -90,12 +150,12 @@ const PlacePage: React.FC = () => {
             <h4>Hot Place</h4>
             <IonIcon
               icon={map}
-              style={{ marginLeft: "2vw", marginTop:"1vh"}}
+              style={{ marginLeft: "2vw", marginTop: "1vh" }}
               onClick={() => setOpen(true)}
             />
           </div>
           <IonList>
-            {wishList.map((item: WishItemDO, i) => (
+            {checkboxList.map((item: any, i) => (
               <IonItem key={i}>
                 <IonLabel>
                   {item.isChecked ? (
@@ -117,7 +177,7 @@ const PlacePage: React.FC = () => {
                   onClick={() => {
                     item.isChecked = !item.isChecked;
                     let tmp = [...wishList];
-                    console.log(item.id + "비트반전!");
+                    addMark(item.isChecked, item.latitude, item.longitude);
                     setWishList(tmp);
                   }}
                 />
