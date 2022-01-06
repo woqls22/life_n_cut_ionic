@@ -218,17 +218,17 @@
   display: flex;
   align-items: center;
 }
-.bucket_list_container{
-    margin-top: 2vh;
-    margin-bottom: 5vh;
+.bucket_list_container {
+  margin-top: 2vh;
+  margin-bottom: 5vh;
 }
-.albumModal{
-    width: 90vw;
-    margin-top: 20vh;
-    margin-left: auto;
-    margin-right: auto;
+.albumModal {
+  width: 90vw;
+  margin-top: 20vh;
+  margin-left: auto;
+  margin-right: auto;
 }
-.posting_photo{
+.posting_photo {
   width: 100%;
   margin-left: auto;
   margin-right: auto;
@@ -238,32 +238,32 @@
   margin-top: 15vh;
   height: 30vh;
 }
-.empty_text{
+.empty_text {
   text-align: center;
   font-family: "Yeon Sung", cursive;
   margin-top: 7vh;
 }
-.photoEnrollModal{
+.photoEnrollModal {
   width: 90vw;
   margin-top: 10vh;
   margin-left: auto;
   margin-right: auto;
 }
-.anniversary_enroll_btn{
+.anniversary_enroll_btn {
   width: 100%;
   display: flex;
   justify-content: flex-end;
 }
-.input-file-button{
+.input-file-button {
   padding-left: 50vw;
   padding-right: 50vw;
-  padding-bottom:3vh;
+  padding-bottom: 3vh;
   padding-top: 3vh;
   border-radius: 4px;
   color: white;
   cursor: pointer;
 }
-.profile_preview_box{
+.profile_preview_box {
   display: flex;
   justify-content: center;
   height: 30vh;
@@ -271,31 +271,31 @@
   align-items: center;
   margin-bottom: 1rem;
 }
-.profile_preview{
-    display: flex;
-    justify-content: center;
-    height: 28vh;
+.profile_preview {
+  display: flex;
+  justify-content: center;
+  height: 28vh;
 }
-.wishList{
+.wishList {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  
 }
-.infinite-loading-spinner{
+.infinite-loading-spinner {
   margin-top: 1vh;
 }
-.wishList ion-item{
-  width:75vw;
-  margin-right:10px
+.wishList ion-item {
+  width: 75vw;
+  margin-right: 10px;
 }
-.wishList > ion-checkbox{
+.wishList > ion-checkbox {
   margin-right: 5px;
-}  
-.photo-container{
-  margin-bottom: 5vh;
 }
-.card_value{
+.photo-container {
+  margin-bottom: 5vh;
+  margin-top: 5vh;
+}
+.card_value {
   margin-left: auto;
 }
 @keyframes fadein {

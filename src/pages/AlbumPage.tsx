@@ -346,11 +346,7 @@ const AlbumPage: React.FC = (props: any) => {
                       </div>
                     </>
                   )}
-                  <IonButton
-                    expand="full"
-                    style={{ marginBottom: "2vh" }}
-                    color="dark"
-                  >
+                  <IonButton expand="full" style={{ marginBottom: "2vh" }}>
                     <div>
                       <label className="input-file-button">
                         사진 불러오기
