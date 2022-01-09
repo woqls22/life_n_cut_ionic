@@ -302,6 +302,14 @@
   color: black;
   padding-left: 10px;
   padding-right: 10px;
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+.imgBox {
+  margin-top: 1px;
+  height: 32px;
+  width: 32px;
 }
 @keyframes fadein {
   from {

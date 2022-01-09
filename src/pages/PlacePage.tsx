@@ -21,7 +21,6 @@ import {
   IonToolbar,
 } from "@ionic/react";
 import "../Styles/Home.css";
-
 import { useEffect, useState } from "react";
 import SkeletonLoading from "../components/SkeletonLoading";
 import { height } from "@mui/system";
@@ -35,9 +34,11 @@ import {
 import { WishItemDO } from "./AlbumDetailPage";
 import { useHistory } from "react-router";
 import React from "react";
+import "../Styles/Album.css";
+
 const checkboxList = [
   {
-    val: "카페 공백",
+    val: "네이버",
     isChecked: true,
     id: "1",
     latitude: 37.3594701,
@@ -119,11 +120,11 @@ const PlacePage: React.FC = () => {
     });
     marker.setTitle(title);
     var infowindow = new naver.maps.InfoWindow({
-      content: [`<div className="info-title">${title}</div>`].join(""),
-      maxWidth: 150,
-      borderWidth: 1,
-      anchorSize: new naver.maps.Size(5, 5),
-      anchorSkew: true,
+      content: [
+        `<div class="info-title">
+        <div class="imgBox"> <img src="https://img.icons8.com/external-icongeek26-linear-colour-icongeek26/64/000000/external-bucket-kindergarten-icongeek26-linear-colour-icongeek26.png"/></div>
+      <div>${title}</div></div>`,
+      ].join(""),
     });
     infowindow.open(naverMap!, marker);
     naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
