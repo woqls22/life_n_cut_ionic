@@ -105,16 +105,28 @@ const PlacePage: React.FC = () => {
     };
     initMap();
   }, []);
-  const addMark = (isChecked: boolean, latitude: number, longitude: number) => {
-    if (isChecked) {
-      var marker = new naver.maps.Marker({
-        position: new naver.maps.LatLng(latitude, longitude),
-        map: naverMap,
-      });
-      naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
-    } else {
-      naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
-    }
+  const addMark = (
+    isChecked: boolean,
+    latitude: number,
+    longitude: number,
+    title: string
+  ) => {
+    console.log(title);
+    var marker = new naver.maps.Marker({
+      position: new naver.maps.LatLng(latitude, longitude),
+      map: naverMap,
+      zIndex: 100,
+    });
+    marker.setTitle(title);
+    var infowindow = new naver.maps.InfoWindow({
+      content: [`<div className="info-title">${title}</div>`].join(""),
+      maxWidth: 150,
+      borderWidth: 1,
+      anchorSize: new naver.maps.Size(5, 5),
+      anchorSkew: true,
+    });
+    infowindow.open(naverMap!, marker);
+    naverMap?.setCenter(new naver.maps.LatLng(latitude, longitude));
   };
   if (showLoading) {
     return <>{SkeletonLoading()}</>;
@@ -177,7 +189,12 @@ const PlacePage: React.FC = () => {
                   onClick={() => {
                     item.isChecked = !item.isChecked;
                     let tmp = [...wishList];
-                    addMark(item.isChecked, item.latitude, item.longitude);
+                    addMark(
+                      item.isChecked,
+                      item.latitude,
+                      item.longitude,
+                      item.val
+                    );
                     setWishList(tmp);
                   }}
                 />

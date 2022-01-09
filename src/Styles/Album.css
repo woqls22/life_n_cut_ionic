@@ -298,6 +298,11 @@
 .card_value {
   margin-left: auto;
 }
+.info-title {
+  color: black;
+  padding-left: 10px;
+  padding-right: 10px;
+}
 @keyframes fadein {
   from {
     opacity: 0;
